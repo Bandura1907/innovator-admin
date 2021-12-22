@@ -29,7 +29,6 @@ const Users = () => {
         },
         {
             cell: (row) => {
-                // return <button onClick={() => onClick(row)}>Action</button>
                 return <div className="table-actions">
                     <Link to={'/edit-user/' + row.clientId} style={{color: "#265ed7"}}><i className="icon-copy dw dw-edit2"/></Link>
                     <a onClick={() => deleteUser(row.clientId)} href="#" style={{color: "#e95959"}}><i
