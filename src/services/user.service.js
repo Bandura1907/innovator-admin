@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_URL = 'http://65.108.182.146:8080';
+// const API_URL = 'http://localhost:8080';
 
 class UserService {
     getAllUsers() {
