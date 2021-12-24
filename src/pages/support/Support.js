@@ -60,7 +60,7 @@ const Support = () => {
     return <div className="main-container">
         <div className="pd-20 card-box mb-30">
             <div className="title pb-20">
-                <h2 className="h3 mb-0">Пользователи</h2>
+                <h2 className="h3 mb-0">Поддержка</h2>
             </div>
             <DataTable columns={columns} data={reports} selectableRows pagination/>
         </div>
