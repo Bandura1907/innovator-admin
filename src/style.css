@@ -54,7 +54,7 @@ img {
     border: 0;
     vertical-align: top;
     max-width: 100%;
-    height: auto
+    /*height: auto*/
 }
 
 input, select, textarea {

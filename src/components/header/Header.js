@@ -1,155 +1,59 @@
-import {Link} from "react-router-dom";
+import logo from '../../images/logo/Lightbulb.svg';
+import './header.css';
+import person from '../../images/photo1.jpg';
+import {Link, useLocation} from "react-router-dom";
+import {useEffect, useState} from "react";
 
 const Header = () => {
+    const [active, setActive] = useState('/');
+    const location = useLocation();
+
+    useEffect(() => {
+        setActive(location.pathname);
+    }, [location]);
 
     return (
-        <div className="header col-md-auto">
-            <div className="header-left">
-                <div className="menu-icon dw dw-menu"/>
-                <div className="search-toggle-icon dw dw-search2" data-toggle="header_search"/>
-                <div className="header-search">
-                    <form>
-                        <div className="form-group mb-0">
-                            <i className="dw dw-search2 search-icon"/>
-                            <input type="text" className="form-control search-input" placeholder="Search Here"/>
-                                <div className="dropdown">
-                                    <a className="dropdown-toggle no-arrow" href="#" role="button"
-                                       data-toggle="dropdown">
-                                        <i className="ion-arrow-down-c"/>
-                                    </a>
-                                    <div className="dropdown-menu dropdown-menu-right">
-                                        <div className="form-group row">
-                                            <label className="col-sm-12 col-md-2 col-form-label">From</label>
-                                            <div className="col-sm-12 col-md-10">
-                                                <input className="form-control form-control-sm form-control-line"
-                                                       type="text"/>
-                                            </div>
-                                        </div>
-                                        <div className="form-group row">
-                                            <label className="col-sm-12 col-md-2 col-form-label">To</label>
-                                            <div className="col-sm-12 col-md-10">
-                                                <input className="form-control form-control-sm form-control-line"
-                                                       type="text"/>
-                                            </div>
-                                        </div>
-                                        <div className="form-group row">
-                                            <label className="col-sm-12 col-md-2 col-form-label">Subject</label>
-                                            <div className="col-sm-12 col-md-10">
-                                                <input className="form-control form-control-sm form-control-line"
-                                                       type="text"/>
-                                            </div>
-                                        </div>
-                                        <div className="text-right">
-                                            <button className="btn btn-primary">Search</button>
-                                        </div>
-                                    </div>
-                                </div>
+        <nav className="navbar navbar-expand-xl navbar-light bg-light">
+            <Link to="/" className="navbar-brand"><img src={logo} alt="" width={30} height={30}/><b> Innovator</b></Link>
+            <button type="button" className="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span className="navbar-toggler-icon"/>
+            </button>
+            <div id="navbarCollapse" className="collapse navbar-collapse justify-content-start">
+
+                <div className="navbar-nav">
+                    <form className="navbar-form form-inline">
+                        <div className=" search-box">
+                            <input type="text" id="search" className="form-control" placeholder="Search by Name"/>
                         </div>
                     </form>
+                    <Link to="/" className={"nav-item nav-link " + (active === '/' ? 'active' : null)}>Аналитика</Link>
+                    <a href="#" className={"nav-item nav-link " + (active === '/d' ? 'active' : null)}>Новости</a>
+                    <a href="#" className={"nav-item nav-link " + (active === '/s' ? 'active' : null)}>Полезное</a>
+                    <Link to="/support" className={"nav-item nav-link " + (active === '/support' ? 'active' : null)}>Поддержка</Link>
+                    <Link to='/users' className={"nav-item nav-link " + (active === '/users' ? 'active' : null)}>Пользователи</Link>
                 </div>
-            </div>
 
-            <div className="header-right">
-                <nav className="navbar">
-                    <div className="container-fluid">
-                        <div>
-                            <ul className="nav navbar-nav">
-                                <div className="row">
-                                    <li className="col-md-auto"><Link to={'/'}>Аналитика</Link></li>
-                                    <li className="col-md-auto"><a href="#">Новости</a></li>
-                                    <li className="col-md-auto"><a href="#">Полезное</a></li>
-                                    <li className="col-md-auto"><a href="#">Поддержка</a></li>
-                                    <li className="col-md-auto"><Link to="/users">Пользователи</Link></li>
-                                </div>
-                            </ul>
+                <div className="navbar-nav ml-auto">
+                    <a href="#" className="nav-item nav-link notifications"><i className="fa fa-bell-o"/><span
+                        className="badge">1</span></a>
+                    <a href="#" className="nav-item nav-link messages"><i className="fa fa-envelope-o"/><span
+                        className="badge">10</span></a>
+                    <div className="nav-item dropdown">
+                        <a href="#" data-toggle="dropdown" className="nav-link dropdown-toggle user-action"><img
+                            src={person} className="avatar" alt="Avatar"/> Paula Wilson <b
+                            className="caret"/></a>
+                        <div className="dropdown-menu">
+                            <a href="#" className="dropdown-item"><i className="fa fa-user-o"/> Profile</a>
+                            <a href="#" className="dropdown-item"><i className="fa fa-calendar-o"/> Calendar</a>
+                            <a href="#" className="dropdown-item"><i className="fa fa-sliders"/> Settings</a>
+                            <div className="dropdown-divider"/>
+                            <a href="#" className="dropdown-item"><i className="material-icons">&#xE8AC;</i> Logout</a>
                         </div>
                     </div>
-                </nav>
-                <div className="dashboard-setting user-notification">
-                    <div className="dropdown">
-                        <a className="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
-                            <i className="dw dw-settings2"/>
-                        </a>
-                    </div>
-                </div>
-                <div className="user-notification">
-                    <div className="dropdown">
-                        <a className="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-                            <i className="icon-copy dw dw-notification"/>
-                            <span className="badge notification-active"/>
-                        </a>
-                        <div className="dropdown-menu dropdown-menu-right">
-                            <div className="notification-list mx-h-350 customscroll">
-                                <ul>
-                                    <li>
-                                        <a href="#">
-                                            <img src="../../images/img.jpg" alt=""/>
-                                                <h3>John Doe</h3>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img src="../../images/photo1.jpg" alt=""/>
-                                                <h3>Lea R. Frith</h3>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img src="../../images/photo2.jpg" alt=""/>
-                                                <h3>Erik L. Richards</h3>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img src="../../images/photo3.jpg" alt=""/>
-                                                <h3>John Doe</h3>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img src="../../images/photo4.jpg" alt=""/>
-                                                <h3>Renee I. Hansen</h3>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img src="../../images/img.jpg" alt=""/>
-                                                <h3>Vicki M. Coleman</h3>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="user-info-dropdown">
-                    <div className="dropdown">
-                        <a className="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-						<span className="user-icon">
-							<img src="../../images/photo1.jpg" alt=""/>
-						</span>
-                            <span className="user-name">Ross C. Lopez</span>
-                        </a>
-                        <div className="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                            <a className="dropdown-item" href="profile.html"><i className="dw dw-user1"/> Profile</a>
-                            <a className="dropdown-item" href="profile.html"><i className="dw dw-settings2"/> Setting</a>
-                            <a className="dropdown-item" href="faq.html"><i className="dw dw-help"/> Help</a>
-                            <a className="dropdown-item" href="login.html"><i className="dw dw-logout"/> Log Out</a>
-                        </div>
-                    </div>
-                </div>
-                <div className="github-link">
-                    <a href="https://github.com/dropways/deskapp" target="_blank"><img src="../../images/github.svg"
-                                                                                       alt=""/></a>
                 </div>
             </div>
-        </div>
+        </nav>
+
     )
 };
 

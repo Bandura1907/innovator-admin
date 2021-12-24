@@ -1,5 +1,5 @@
 import DataTable from 'react-data-table-component';
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import UserService from "../../services/user.service";
 import {Link} from "react-router-dom";
 
@@ -12,33 +12,27 @@ const Users = () => {
                 sortable: true
             },
             {
-                name: "Фото",
-                cell: (row) => {
-                    return <div className="avatar mr-2 flex-shrink-0">
-                        <img src={row.photoUrl} className="border-radius-100 box-shadow" width="50"
-                             height="50" alt=""/>
-                    </div>
-                }
-            },
-            {
                 name: "Полное имя",
+                cell: row => {
+                    return <div className="d-flex align-items-center"><img className="rounded-circle"
+                                                                           src={row.photoUrl} alt=""
+                                                                           width="40" height="40"/><span
+                        className="ml-2">{row.fullName}</span></div>
+                },
                 selector: (row) => row.fullName,
                 sortable: true
-            }
-            ,
+            },
             {
                 name: "Email",
                 selector: (row) => row.email,
                 sortable: true
-            }
-            ,
+            },
             {
                 name: "Photo url",
                 selector: (row) => row.photoUrl,
                 sortable: true,
                 right: true
-            }
-            ,
+            },
             {
                 cell: (row) => {
                     return <div className="table-actions">
@@ -48,13 +42,11 @@ const Users = () => {
                             className="icon-copy dw dw-delete-3"/></a>
                     </div>
                 },
-                ignoreRowClick:
-                    true,
+                ignoreRowClick: true,
                 allowOverflow: true,
                 button: true
             }
-        ]
-    ;
+        ];
 
     const deleteUser = (id) => {
             UserService.deleteUser(id).then(() => {
@@ -62,8 +54,7 @@ const Users = () => {
                     setData(response.data);
                 });
             });
-        }
-    ;
+        };
 
     const [data, setData] = useState([]);
 
@@ -71,8 +62,7 @@ const Users = () => {
             UserService.getAllUsers().then(response => {
                 setData(response.data);
             });
-        }
-        , [])
+        }, [])
 
     const onClick = (row) => {
         console.log(row)

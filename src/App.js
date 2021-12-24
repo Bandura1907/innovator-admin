@@ -6,6 +6,7 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import Users from "./pages/users/Users";
 import EditUser from "./pages/editUser/editUser";
 import AddUser from "./pages/addUser/addUser";
+import Support from "./pages/support/Support";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
                 <Header/>
                 <Switch>
                     <Route exact path="/" component={Home}/>
+                    <Route path="/support" component={Support}/>
                     <Route path="/users" component={Users}/>
                     <Route path="/edit-user/:id" component={EditUser}/>
                     <Route path="/add-user" component={AddUser}/>

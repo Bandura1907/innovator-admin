@@ -1,4 +1,4 @@
-import {Redirect, useParams} from "react-router-dom";
+import {Link, Redirect, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import UserService from "../../services/user.service";
 
@@ -42,6 +42,9 @@ const EditUser = () => {
                             <p className="mb-30">All bootstrap element classies</p>
                         </div>
                         <div className="pull-right">
+                            <Link to="/users">
+                                <button type="button" className="btn btn-outline-danger btn-sm scroll-click m-2">Отмена</button>
+                            </Link>
                             <button type="submit" className="btn btn-primary btn-sm scroll-click" rel="content-y"
                                     data-toggle="collapse">Сохранить
                             </button>
