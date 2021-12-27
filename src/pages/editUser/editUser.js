@@ -38,8 +38,7 @@ const EditUser = () => {
                 <form onSubmit={save}>
                     <div className="clearfix">
                         <div className="pull-left">
-                            <h4 className="text-blue h4">Default Basic Forms</h4>
-                            <p className="mb-30">All bootstrap element classies</p>
+                            <h4 className="text-blue h4">Редактирование пользователя</h4>
                         </div>
                         <div className="pull-right">
                             <Link to="/users">

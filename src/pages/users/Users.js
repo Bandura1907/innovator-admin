@@ -2,8 +2,11 @@ import DataTable from 'react-data-table-component';
 import {useEffect, useState} from "react";
 import UserService from "../../services/user.service";
 import {Link} from "react-router-dom";
+import {BarWave} from "react-cssfx-loading";
 
 const Users = () => {
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const columns = [
             {
@@ -61,15 +64,12 @@ const Users = () => {
     useEffect(() => {
             UserService.getAllUsers().then(response => {
                 setData(response.data);
+                setIsLoading(false);
             });
         }, [])
 
-    const onClick = (row) => {
-        console.log(row)
-    }
-
     return (
-        <div className="main-container">
+       isLoading? <BarWave className="loaderBar"/> : <div className="main-container">
 
             <div className="pd-20 card-box mb-30">
 

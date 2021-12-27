@@ -27,7 +27,7 @@ const Header = () => {
                         </div>
                     </form>
                     <Link to="/" className={"nav-item nav-link " + (active === '/' ? 'active' : null)}>Аналитика</Link>
-                    <a href="#" className={"nav-item nav-link " + (active === '/d' ? 'active' : null)}>Новости</a>
+                    <Link to="/news" className={"nav-item nav-link " + (active === '/news' ? 'active' : null)}>Новости</Link>
                     <a href="#" className={"nav-item nav-link " + (active === '/s' ? 'active' : null)}>Полезное</a>
                     <Link to="/support" className={"nav-item nav-link " + (active === '/support' ? 'active' : null)}>Поддержка</Link>
                     <Link to='/users' className={"nav-item nav-link " + (active === '/users' ? 'active' : null)}>Пользователи</Link>

@@ -7,6 +7,10 @@ import Users from "./pages/users/Users";
 import EditUser from "./pages/editUser/editUser";
 import AddUser from "./pages/addUser/addUser";
 import Support from "./pages/support/Support";
+import News from "./pages/news/News";
+import NewsAdd from "./pages/news/newsAdd/NewsAdd";
+import ViewNews from "./pages/news/viewNews/ViewNews";
+import EditNews from "./pages/news/editNews/EditNews";
 
 function App() {
     return (
@@ -15,6 +19,10 @@ function App() {
                 <Header/>
                 <Switch>
                     <Route exact path="/" component={Home}/>
+                    <Route path="/news" component={News}/>
+                    <Route path='/add-news' component={NewsAdd}/>
+                    <Route path="/edit-news/:id" component={EditNews}/>
+                    <Route path="/viewNews/:id" component={ViewNews}/>
                     <Route path="/support" component={Support}/>
                     <Route path="/users" component={Users}/>
                     <Route path="/edit-user/:id" component={EditUser}/>
