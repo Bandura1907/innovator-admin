@@ -32,7 +32,7 @@ const Users = () => {
             },
             {
                 name: "Photo url",
-                selector: (row) => row.photoUrl,
+                selector: (row) => row.photoUrl.slice(0, 100),
                 sortable: true,
                 right: true
             },
@@ -52,11 +52,13 @@ const Users = () => {
         ];
 
     const deleteUser = (id) => {
-            UserService.deleteUser(id).then(() => {
-                UserService.getAllUsers().then(response => {
-                    setData(response.data);
+            if (window.confirm("Ви уверены что хотите удалить пользователя?")) {
+                UserService.deleteUser(id).then(() => {
+                    UserService.getAllUsers().then(response => {
+                        setData(response.data);
+                    });
                 });
-            });
+            }
         };
 
     const [data, setData] = useState([]);
@@ -82,7 +84,9 @@ const Users = () => {
                           data-toggle="collapse">Добавить
                     </Link>
                 </div>
-                <DataTable columns={columns} data={data} selectableRows pagination/>
+                <DataTable columns={columns} data={data}
+                           // selectableRows
+                           pagination/>
 
             </div>
         </div>

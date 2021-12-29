@@ -2,12 +2,13 @@ import DataTable from 'react-data-table-component';
 import {useEffect, useState} from "react";
 import ReportService from "../../services/report.service";
 import {BarWave} from "react-cssfx-loading";
+import {Link} from "react-router-dom";
 
 const Support = () => {
 
     function status(status) {
         if (status === "Новый") {
-            return <span className="badge badge-primary">{status}</span>;
+            return <span className="badge badge-warning">{status}</span>;
         } else if (status === "Отменено") {
             return <span className="badge badge-danger">{status}</span>;
         } else if (status === "Решено") {
@@ -26,7 +27,7 @@ const Support = () => {
         },
         {
             name: "Email",
-            selector: row => row.user.email,
+            selector: row => row.customEmail,
             sortable: true
         },
         {
@@ -71,8 +72,11 @@ const Support = () => {
                         <i className="dw dw-more"/>
                     </a>
                     <div className="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                        <button className="dropdown-item"><i className="dw dw-eye"/> Посмотреть</button>
-                        <button className="dropdown-item"><i className="dw dw-edit2"/> Edit</button>
+                        <Link to={'/view-support/' + row.id}>
+                            <button className="dropdown-item"><i className="dw dw-eye"/> Посмотреть</button>
+                        </Link>
+
+                        {/*<button className="dropdown-item"><i className="dw dw-edit2"/> Edit</button>*/}
                         <button className="dropdown-item" onClick={() => deleteReport(row.id)}><i
                             className="dw dw-delete-3"/> Удалить
                         </button>
@@ -93,11 +97,14 @@ const Support = () => {
     }, []);
 
     const deleteReport = (id) => {
-        ReportService.deleteReport(id).then(() => {
-            ReportService.getAllReports().then(res => {
-                setReports(res.data);
+        if (window.confirm("Вы уверены что хотите удалить данную проблему?")) {
+            ReportService.deleteReport(id).then(() => {
+                ReportService.getAllReports().then(res => {
+                    setReports(res.data);
+                });
             });
-        });
+        }
+
     }
 
     return loading ? <BarWave className="loaderBar"/> : <div className="main-container">
@@ -105,7 +112,9 @@ const Support = () => {
             <div className="title pb-20">
                 <h2 className="h3 mb-0">Поддержка</h2>
             </div>
-            <DataTable columns={columns} data={reports} selectableRows pagination/>
+            <DataTable columns={columns} data={reports}
+                       // selectableRows
+                       pagination/>
         </div>
 
     </div>

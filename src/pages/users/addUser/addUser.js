@@ -1,44 +1,32 @@
-import {Link, Redirect, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
-import UserService from "../../services/user.service";
+import {useState} from "react";
+import UserService from "../../../services/user.service";
+import {Link, Redirect} from "react-router-dom";
 
-const EditUser = () => {
-
-    const id = useParams().id;
+const AddUser = () => {
 
     const [redirect, setRedirect] = useState(false);
 
-    const [fullName, setFullName] = useState('');
-    const [email, setEmail] = useState('');
-    const [photoUrl, setPhotoUrl] = useState('');
+    const [fullName, setFullName] = useState("");
+    const [email, setEmail] = useState("");
+    const [photoUrl, setPhotoUrl] = useState("");
 
-    useEffect(() => {
-        UserService.getUser(id).then(res => {
-            setFullName(res.data.fullName);
-            setEmail(res.data.email);
-            setPhotoUrl(res.data.photoUrl);
+    const saveUser = (e) => {
+        e.preventDefault();
+        UserService.addUser(fullName, email, photoUrl).then(() => {
+            setRedirect(true);
         });
-    }, [id]);
-
-    const save = (e) => {
-      e.preventDefault();
-
-      UserService.updateUser(id, fullName, email, photoUrl).then(function () {
-         setRedirect(true);
-      });
     };
 
-    if (redirect) {
+    if (redirect)
         return <Redirect to="/users"/>
-    }
 
     return (
         <div className="main-container">
             <div className="pd-20 card-box mb-30">
-                <form onSubmit={save}>
+                <form onSubmit={saveUser}>
                     <div className="clearfix">
                         <div className="pull-left">
-                            <h4 className="text-blue h4">Редактирование пользователя</h4>
+                            <h4 className="text-blue h4">Добавте пользователя</h4>
                         </div>
                         <div className="pull-right">
                             <Link to="/users">
@@ -53,27 +41,25 @@ const EditUser = () => {
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">Полное имя</label>
                         <div className="col-sm-12 col-md-10">
-                            <input className="form-control" type="text" onChange={e => setFullName(e.target.value)}
-                                   value={fullName}/>
+                            <input className="form-control" type="text" onChange={e => setFullName(e.target.value)}/>
                         </div>
                     </div>
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">Email</label>
                         <div className="col-sm-12 col-md-10">
-                            <input className="form-control" onChange={e => setEmail(e.target.value)} value={email}/>
+                            <input className="form-control" onChange={e => setEmail(e.target.value)}/>
                         </div>
                     </div>
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">URL</label>
                         <div className="col-sm-12 col-md-10">
-                            <input className="form-control" onChange={e => setPhotoUrl(e.target.value)} value={photoUrl}
-                                   type="url"/>
+                            <input className="form-control" onChange={e => setPhotoUrl(e.target.value)} type="url"/>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-    );
+    )
 };
 
-export default EditUser;
+export default AddUser;
