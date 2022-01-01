@@ -3,6 +3,7 @@ import './header.css';
 import person from '../../images/photo1.jpg';
 import {Link, useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
+import innovator from '../../images/Innovator.svg';
 
 const Header = () => {
     const [active, setActive] = useState('/');
