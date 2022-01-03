@@ -1,57 +1,45 @@
 import './news.css';
 import plus from '../../images/Plus.svg';
 import {Link} from "react-router-dom";
-import {useEffect, useState} from "react";
-import NewsService from "../../services/news.service";
+import {useCallback, useContext, useEffect, useState} from "react";
 import Pagination from "@material-ui/lab/Pagination";
 import {BarWave} from "react-cssfx-loading";
+import {useHttp} from "../../hooks/http.hook";
+import {AuthContext} from "../../context/auth-context";
+import {URL} from "../../services/url";
 
 const News = () => {
-    const [loading, setLoading] = useState(true);
+    const {loading, request} = useHttp();
+    const {token} = useContext(AuthContext);
     const [news, setNews] = useState([]);
-
     const [page, setPage] = useState(1);
     const [count, setCount] = useState(0);
+    const header = {
+        Authorization: `Bearer ${token}`
+    };
 
+    const fetchNews = useCallback(async () => {
+        try {
+            const fetchedNews = await request(`${URL}/api/news_for_front?page=${page - 1}`, "GET", null, header);
 
-    const getRequestParams = (page) => {
-        let params = {};
+            setNews(fetchedNews.news);
+            setCount(fetchedNews.totalPages);
+        } catch (e) {}
+    }, [page]);
 
-        if (page)
-            params['page'] = page - 1;
-
-        return params;
-    }
-
-    const retrieveNews = () => {
-        const params = getRequestParams(page);
-
-        NewsService.getNews(params).then(res => {
-            const {news, totalPages} = res.data;
-
-            setNews(news);
-            setCount(totalPages);
-            setLoading(false);
-        });
-    }
-
-    useEffect(retrieveNews, [page]);
+    useEffect(fetchNews, [page]);
 
     const handlePageChange = (e, value) => {
         setPage(value);
     }
 
-    const deleteNews = id => {
-        NewsService.deleteNews(id).then(() => {
-            const params = getRequestParams(page);
-            NewsService.getNews(params).then(res => {
-                const {news, totalPages} = res.data;
-                setLoading(true)
-                setNews(news);
-                setCount(totalPages);
-                setLoading(false);
-            });
-        });
+    const deleteNews = async id => {
+        try {
+           const fetchedNews = await request(`${URL}/api/delete_news/${id}?page=${page - 1}`, "DELETE", null, header);
+            setNews(fetchedNews.news);
+            setCount(fetchedNews.totalPages);
+
+        } catch (e) {}
     };
 
     return (

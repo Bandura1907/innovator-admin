@@ -1,17 +1,26 @@
 import logo from '../../images/logo/Lightbulb.svg';
 import './header.css';
 import person from '../../images/photo1.jpg';
-import {Link, useLocation} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {Link, useHistory, useLocation} from "react-router-dom";
+import {useContext, useEffect, useState} from "react";
 import innovator from '../../images/Innovator.svg';
+import {AuthContext} from "../../context/auth-context";
 
 const Header = () => {
     const [active, setActive] = useState('/');
     const location = useLocation();
+    const history = useHistory();
+    const auth = useContext(AuthContext);
 
     useEffect(() => {
         setActive(location.pathname);
     }, [location]);
+
+    const logout = e => {
+      e.preventDefault();
+      auth.logout();
+      history.push('/login');
+    };
 
     return (
         <nav className="navbar navbar-expand-xl navbar-light bg-light">
@@ -48,7 +57,7 @@ const Header = () => {
                             <a href="#" className="dropdown-item"><i className="fa fa-calendar-o"/> Calendar</a>
                             <a href="#" className="dropdown-item"><i className="fa fa-sliders"/> Settings</a>
                             <div className="dropdown-divider"/>
-                            <Link to="/login" className="dropdown-item"><i className="material-icons">&#xE8AC;</i> Logout</Link>
+                            <a href="#" onClick={logout} className="dropdown-item"><i className="material-icons">&#xE8AC;</i> Logout</a>
                         </div>
                     </div>
                 </div>

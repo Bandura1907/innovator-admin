@@ -1,35 +1,51 @@
 import {Link, Redirect, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 import NewsService from "../../../services/news.service";
 import {BarWave} from "react-cssfx-loading";
+import {useHttp} from "../../../hooks/http.hook";
+import {AuthContext} from "../../../context/auth-context";
+import {URL} from "../../../services/url";
 
 const EditNews = () => {
     const id = useParams().id;
 
-    const [loading, setLoading] = useState(true);
     const [redirect, setRedirect] = useState(false);
-
     const [pictureUrl, setPictureUrl] = useState('');
     const [videoUrl, setVideoUrl] = useState('');
     const [text, setText] = useState('');
     const [sourceUrl, setSourceUrl] = useState('');
+    const {loading, request} = useHttp();
+    const {token} = useContext(AuthContext);
+    const header = {
+        Authorization: `Bearer ${token}`
+    };
+
+    const fetchNews = useCallback(async () => {
+        try {
+            const news = await request(`${URL}/api/news_id/${id}`, "GET", null, header);
+            setPictureUrl(news.pictureUrl);
+            setVideoUrl(news.videoUrl);
+            setText(news.text);
+            setSourceUrl(news.sourceUrl);
+        } catch (e) {}
+    }, [id]);
 
     useEffect(() => {
-        NewsService.getNewsById(id).then(res => {
-            setPictureUrl(res.data.pictureUrl);
-            setVideoUrl(res.data.videoUrl);
-            setText(res.data.text);
-            setSourceUrl(res.data.sourceUrl);
+        fetchNews();
+    }, [id]);
 
-            setLoading(false);
-        });
-    }, []);
-
-    const save = (e) => {
+    const save = async (e) => {
            e.preventDefault();
-           NewsService.editNews(id, pictureUrl, videoUrl, text, sourceUrl).then(() => {
-              setRedirect(true);
-           });
+           try {
+               await request(`${URL}/api/news_edit/${id}`, "PUT", {
+                   pictureUrl,
+                   videoUrl,
+                   text,
+                   sourceUrl
+               }, header);
+
+               setRedirect(true);
+           } catch (e) {}
     }
 
     if (redirect)

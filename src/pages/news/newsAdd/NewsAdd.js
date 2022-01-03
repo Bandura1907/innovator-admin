@@ -1,6 +1,9 @@
 import {Link, Redirect} from "react-router-dom";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import NewsService from "../../../services/news.service";
+import {useHttp} from "../../../hooks/http.hook";
+import {AuthContext} from "../../../context/auth-context";
+import {URL} from "../../../services/url";
 
 const NewsAdd = () => {
 
@@ -10,12 +13,21 @@ const NewsAdd = () => {
     const [videoUrl, setVideoUrl] = useState('');
     const [text, setText] = useState('');
     const [sourceUrl, setSourceUrl] = useState('');
+    const {loading, request} = useHttp();
+    const {token} = useContext(AuthContext);
+    const header = {
+        Authorization: `Bearer ${token}`
+    };
 
-    const saveNews = (e) => {
+    const saveNews = async (e) => {
         e.preventDefault();
-        NewsService.addNews(pictureUrl, videoUrl, text, sourceUrl).then(() => {
-           setRedirect(true);
-        });
+        await request(`${URL}/api/news_add`, "POST", {
+            pictureUrl,
+            videoUrl,
+            text,
+            sourceUrl
+        }, header);
+        setRedirect(true);
     };
 
     if (redirect)

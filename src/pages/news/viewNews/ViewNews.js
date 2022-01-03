@@ -1,21 +1,32 @@
 import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 import NewsService from "../../../services/news.service";
 import Plyr from "plyr-react";
 import 'plyr-react/dist/plyr.css';
 import {BarWave} from "react-cssfx-loading";
+import {useHttp} from "../../../hooks/http.hook";
+import {AuthContext} from "../../../context/auth-context";
+import {URL} from "../../../services/url";
 
 const ViewNews = () => {
     const id = useParams().id;
 
+    const {loading, request} = useHttp();
+    const {token} = useContext(AuthContext);
     const [news, setNews] = useState({});
-    const [loading, setLoading] = useState(true);
+    const header = {
+      Authorization: `Bearer ${token}`
+    };
+
+    const fetchNews = useCallback(async () => {
+        try {
+            const news = await request(`${URL}/api/news_id/${id}`, "GET", null, header);
+            setNews(news);
+        } catch (e) {}
+    }, []);
 
     useEffect(() => {
-        NewsService.getNewsById(id).then(res => {
-            setNews(res.data);
-            setLoading(false);
-        });
+        fetchNews();
     }, []);
 
     return (

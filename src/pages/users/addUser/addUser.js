@@ -1,20 +1,31 @@
-import {useState} from "react";
+import {useContext, useState} from "react";
 import UserService from "../../../services/user.service";
 import {Link, Redirect} from "react-router-dom";
+import {useHttp} from "../../../hooks/http.hook";
+import {AuthContext} from "../../../context/auth-context";
+import {URL} from "../../../services/url";
 
 const AddUser = () => {
 
     const [redirect, setRedirect] = useState(false);
-
+    const {request} = useHttp();
+    const {token} = useContext(AuthContext);
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [photoUrl, setPhotoUrl] = useState("");
+    const header = {
+        Authorization: `Bearer ${token}`
+    };
 
-    const saveUser = (e) => {
+    const saveUser = async (e) => {
         e.preventDefault();
-        UserService.addUser(fullName, email, photoUrl).then(() => {
-            setRedirect(true);
-        });
+        await request(`${URL}/api/add_user`, "POST", {
+            fullName,
+            email,
+            photoUrl
+        }, header);
+
+        setRedirect(true);
     };
 
     if (redirect)
