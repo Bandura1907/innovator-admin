@@ -4,7 +4,10 @@ import axios from "axios";
 class NewsService {
 
     getNews(params) {
-        return axios.get(`${URL}/api/news_for_front`, {params});
+        return axios.get(`${URL}/api/news_for_front`,
+            {
+                params
+            });
     }
 
     getNewsById(id) {

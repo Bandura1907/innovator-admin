@@ -12,18 +12,16 @@ import NewsAdd from "./pages/news/newsAdd/NewsAdd";
 import ViewNews from "./pages/news/viewNews/ViewNews";
 import EditNews from "./pages/news/editNews/EditNews";
 import ViewSupport from "./pages/support/ViewsSupport/ViewSupport";
-import Login from "./pages/login/Login";
 import Layout from "./hoc/Layout";
+import Login from "./pages/login/Login";
 
 function App() {
 
     return (
         <Router>
-
                 <Switch>
 
                     <Route exact path="/login" component={Login}/>
-
                     <Layout>
                         <Route exact path="/" component={Home}/>
                         <Route path="/news" component={News}/>
@@ -36,8 +34,8 @@ function App() {
                         <Route path="/edit-user/:id" component={EditUser}/>
                         <Route path="/add-user" component={AddUser}/>
                     </Layout>
-                </Switch>
 
+                </Switch>
 
         </Router>
     );

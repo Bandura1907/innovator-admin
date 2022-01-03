@@ -48,7 +48,7 @@ const Header = () => {
                             <a href="#" className="dropdown-item"><i className="fa fa-calendar-o"/> Calendar</a>
                             <a href="#" className="dropdown-item"><i className="fa fa-sliders"/> Settings</a>
                             <div className="dropdown-divider"/>
-                            <a href="#" className="dropdown-item"><i className="material-icons">&#xE8AC;</i> Logout</a>
+                            <Link to="/login" className="dropdown-item"><i className="material-icons">&#xE8AC;</i> Logout</Link>
                         </div>
                     </div>
                 </div>

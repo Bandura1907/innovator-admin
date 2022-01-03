@@ -1,6 +1,5 @@
 import axios from "axios";
-import {URL} from './url'
-
+import {URL} from './url';
 
 class UserService {
     getAllUsers() {

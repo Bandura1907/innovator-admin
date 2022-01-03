@@ -3,7 +3,7 @@ import logo from '../../images/logo/Lightbulb.svg';
 import innovator from '../../images/Innovator.svg';
 import {Link} from "react-router-dom";
 
-const Login = () => {
+const Login = (props) => {
 
     return (
         <body className="login-page">
@@ -27,16 +27,18 @@ const Login = () => {
                             <div className="login-title">
                                 <h2 className="text-center text-primary">Login To Innovator</h2>
                             </div>
-                            <form>
+                            <form >
                                 <div className="input-group custom">
-                                    <input type="text" className="form-control form-control-lg" placeholder="Username"/>
+                                    <input type="text" className="form-control form-control-lg" placeholder="Username"
+                                           />
                                     <div className="input-group-append custom">
                                         <span className="input-group-text"><i className="icon-copy dw dw-user1"/></span>
                                     </div>
                                 </div>
                                 <div className="input-group custom">
                                     <input type="password" className="form-control form-control-lg"
-                                           placeholder="**********"/>
+                                           placeholder="**********"
+                                           />
                                     <div className="input-group-append custom">
                                         <span className="input-group-text"><i className="dw dw-padlock1"/></span>
                                     </div>
@@ -54,8 +56,8 @@ const Login = () => {
                                     <div className="col-sm-12">
                                         <div className="input-group mb-0">
 
-                                            <a className="btn btn-primary btn-lg btn-block" href="index.html">Sign
-                                                In</a>
+                                            <button className="btn btn-primary btn-lg btn-block" type="submit">Sign
+                                                In</button>
                                         </div>
                                     </div>
                                 </div>
