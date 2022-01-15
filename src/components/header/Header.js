@@ -3,7 +3,6 @@ import './header.css';
 import person from '../../images/photo1.jpg';
 import {Link, useHistory, useLocation} from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
-import innovator from '../../images/Innovator.svg';
 import {AuthContext} from "../../context/auth-context";
 
 const Header = () => {
