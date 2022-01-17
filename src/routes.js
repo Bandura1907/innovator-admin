@@ -17,7 +17,7 @@ export const useRoutes = (userType) => {
       case 'ROLE_ADMIN':
           return (
                 <Switch>
-                    <Layout>
+                    <Layout role="admin">
                         <Route exact path="/" component={Home}/>
                         <Route path="/news" component={News}/>
                         <Route path='/add-news' component={NewsAdd}/>
@@ -32,6 +32,19 @@ export const useRoutes = (userType) => {
                     </Layout>
                 </Switch>
           );
+      case 'ROLE_MANAGER':
+          return (
+              <Switch>
+                <Layout role='manager'>
+                    <Route exact path="/" component={Home}/>
+                    <Route path="/news" component={News}/>
+                    <Route path='/add-news' component={NewsAdd}/>
+                    <Route path="/edit-news/:id" component={EditNews}/>
+                    <Route path="/viewNews/:id" component={ViewNews}/>
+                    <Redirect to="/"/>
+                </Layout>
+              </Switch>
+          )
       default: return (
         <Switch>
             <Route exact path="/login" component={Login}/>

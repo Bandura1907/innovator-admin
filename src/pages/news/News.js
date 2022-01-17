@@ -35,9 +35,11 @@ const News = () => {
 
     const deleteNews = async id => {
         try {
-           const fetchedNews = await request(`${URL}/api/delete_news/${id}?page=${page - 1}`, "DELETE", null, header);
-            setNews(fetchedNews.news);
-            setCount(fetchedNews.totalPages);
+           if (window.confirm("Вы уверены что хотите удалить новость?")) {
+               const fetchedNews = await request(`${URL}/api/delete_news/${id}?page=${page - 1}`, "DELETE", null, header);
+               setNews(fetchedNews.news);
+               setCount(fetchedNews.totalPages);
+           }
 
         } catch (e) {}
     };
