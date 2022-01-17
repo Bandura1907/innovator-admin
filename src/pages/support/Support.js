@@ -1,23 +1,12 @@
 import DataTable from 'react-data-table-component';
-import {useEffect, useState} from "react";
-import ReportService from "../../services/report.service";
+import {useCallback, useContext, useEffect, useState} from "react";
 import {BarWave} from "react-cssfx-loading";
 import {Link} from "react-router-dom";
+import {useHttp} from "../../hooks/http.hook";
+import {AuthContext} from "../../context/auth-context";
+import {URL} from "../../services/url";
 
 const Support = () => {
-
-    function status(status) {
-        if (status === "Новый") {
-            return <span className="badge badge-warning">{status}</span>;
-        } else if (status === "Отменено") {
-            return <span className="badge badge-danger">{status}</span>;
-        } else if (status === "Решено") {
-            return <span className="badge badge-success">{status}</span>;
-        } else return <span className="badge badge-secondary">{status}</span>;
-    }
-
-    const [reports, setReports] = useState([]);
-    const [loading, setLoading] = useState(true);
 
     const columns = [
         {
@@ -89,20 +78,42 @@ const Support = () => {
         }
     ];
 
-    useEffect(() => {
-        ReportService.getAllReports().then(res => {
-            setReports(res.data);
-            setLoading(false);
-        });
+    function status(status) {
+        if (status === "Новый") {
+            return <span className="badge badge-warning">{status}</span>;
+        } else if (status === "Отменено") {
+            return <span className="badge badge-danger">{status}</span>;
+        } else if (status === "Решено") {
+            return <span className="badge badge-success">{status}</span>;
+        } else return <span className="badge badge-secondary">{status}</span>;
+    }
+
+    const [reports, setReports] = useState([]);
+    const {loading, request} = useHttp();
+    const {token} = useContext(AuthContext);
+    const header = {
+        Authorization: `Bearer ${token}`
+    };
+
+    const fetchReports = useCallback(async () => {
+        try {
+            const reports = await request(`${URL}/api/all_reports`, "GET", null, header)
+
+            setReports(reports);
+        } catch (e) {}
     }, []);
 
-    const deleteReport = (id) => {
+    useEffect(() => {
+        fetchReports();
+    }, []);
+
+    const deleteReport = async (id) => {
         if (window.confirm("Вы уверены что хотите удалить данную проблему?")) {
-            ReportService.deleteReport(id).then(() => {
-                ReportService.getAllReports().then(res => {
-                    setReports(res.data);
-                });
-            });
+            try {
+                const newReports = await request(`${URL}/api/report_error_delete/${id}`, "DELETE", null, header);
+
+                setReports(newReports);
+            } catch (e) {}
         }
 
     }

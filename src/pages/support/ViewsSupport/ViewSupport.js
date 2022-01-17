@@ -1,7 +1,10 @@
 import './viewSupport.css';
 import {Redirect, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
-import ReportService from "../../../services/report.service";
+import {useCallback, useContext, useEffect, useState} from "react";
+import {useHttp} from "../../../hooks/http.hook";
+import {AuthContext} from "../../../context/auth-context";
+import {BarWave} from "react-cssfx-loading";
+import {URL} from "../../../services/url";
 
 
 const ViewSupport = () => {
@@ -19,29 +22,39 @@ const ViewSupport = () => {
     const id = useParams().id;
 
     const [redirect, setRedirect] = useState(false);
-
+    const {loading, request} = useHttp();
+    const {token} = useContext(AuthContext);
     const [report, setReport] = useState({});
     const [user, setUser] = useState({});
+    const header = {
+        Authorization: `Bearer ${token}`
+    };
+
+    const fetchNews = useCallback(async () => {
+        try {
+            const fetchedReport = await request(`${URL}/api/report_by_id/${id}`, "GET", null, header);
+
+            setReport(fetchedReport);
+            setUser(fetchedReport.user);
+        } catch (e) {}
+    }, []);
 
     useEffect(() => {
-        ReportService.getReportById(id).then(res => {
-            setReport(res.data);
-            setUser(res.data.user);
-        });
+        fetchNews();
     }, [id]);
 
-    const solveProblem = (e) => {
+    const solveProblem = async (e) => {
         e.preventDefault();
-        ReportService.solveProblem(id).then(() => {
-            setRedirect(true);
-        });
+        await request(`${URL}/api/solve_the_problem/${id}`, "PUT", null, header);
+
+        setRedirect(true);
     }
 
     if (redirect)
         return <Redirect to="/support"/>
 
     return (
-        <div className="container bootdey flex-grow-1 container-p-y">
+        loading ? <BarWave className="loaderBar"/> : <div className="container bootdey flex-grow-1 container-p-y">
             <div className="media align-items-center py-3 mb-3">
                 <img src={user.photoUrl} alt="Фото пользователя"
                      className="d-block ui-w-100 rounded-circle"/>
