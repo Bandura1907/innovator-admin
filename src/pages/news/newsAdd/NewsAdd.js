@@ -1,15 +1,18 @@
 import {Link, Redirect} from "react-router-dom";
 import {useContext, useEffect, useRef, useState} from "react";
-import NewsService from "../../../services/news.service";
 import {useHttp} from "../../../hooks/http.hook";
 import {AuthContext} from "../../../context/auth-context";
 import {URL} from "../../../services/url";
 import axios from "axios";
+import {BarWave} from "react-cssfx-loading";
 
 const NewsAdd = () => {
 
+    const [loadingFiles, setLoadingFiles] = useState(false);
     const [redirect, setRedirect] = useState(false);
 
+    const [title, setTitle] = useState('');
+    const [subtitle, setSubtitle] = useState('');
     const [pictureUrl, setPictureUrl] = useState(null);
     const [videoUrl, setVideoUrl] = useState(null);
     const [text, setText] = useState('');
@@ -36,50 +39,99 @@ const NewsAdd = () => {
 
     const saveNews = async (e) => {
         e.preventDefault();
-        // await request(`${URL}/api/news_add`, "POST", {
-        //     pictureUrl,
-        //     videoUrl,
-        //     text,
-        //     sourceUrl
-        // }, header);
-        // console.log(videoUrl)
-        // console.log(pictureUrl)
-
-
 
         //save video and picture url text
         if (!(typeof pictureUrl === "string") && !(typeof videoUrl === "string")) {
+            setLoadingFiles(true);
             const formDataPicture = new FormData();
             const formDataVideo = new FormData();
             formDataPicture.append("picture", pictureUrl);
             formDataVideo.append("video", videoUrl);
 
-            await request(`${URL}/api/save_picture`, "POST", formDataPicture, {
-                ContentType: "multipart/form-data",
-                Authorization: `Bearer ${token}`
+            await axios.post(`${URL}/api/save_picture`, formDataPicture, {
+                headers: {
+                    ContentType: "multipart/form-data",
+                    Authorization: `Bearer ${token}`
+                }
             });
-            await request(`${URL}/api/save_video`, "POST", formDataVideo, {
-                ContentType: "multipart/form-data",
-                Authorization: `Bearer ${token}`
+            await axios.post(`${URL}/api/save_video`, formDataVideo, {
+                headers: {
+                    ContentType: "multipart/form-data",
+                    Authorization: `Bearer ${token}`
+                }
             });
             await request(`${URL}/api/news_add`, "POST", {
                 pictureUrl: `${URL}/api/news/photo/${pictureUrl.name}`,
                 videoUrl: `${URL}/api/video/${videoUrl.name}`,
+                title,
+                subtitle,
                 text,
                 sourceUrl
+            }, {
+                ContentType: "application/json",
+                Authorization: `Bearer ${token}`
             });
+
+            console.log("upload files success")
+            setLoadingFiles(false);
         }
         //save video url (string) and picture file
         else if (!(typeof pictureUrl === "string") && typeof videoUrl === "string") {
+            setLoadingFiles(true);
+            const formData = new FormData();
+            formData.append("picture", pictureUrl);
 
+            await axios.post(`${URL}/api/save_picture`, formData, {
+                headers: {
+                    ContentType: "multipart/form-data",
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            await request(`${URL}/api/news_add`, "POST", {
+                pictureUrl: `${URL}/api/news/photo/${pictureUrl.name}`,
+                title,
+                subtitle,
+                videoUrl,
+                text,
+                sourceUrl
+            }, {
+                ContentType: "application/json",
+                Authorization: `Bearer ${token}`
+            });
+
+            setLoadingFiles(false);
         }
         //save picture url (string) and video file
         else if (typeof pictureUrl === "string" && !(typeof videoUrl === "string")) {
+            setLoadingFiles(true);
+            const formData = new FormData();
+            formData.append("video", videoUrl);
 
-        }
-        //save picture url (string) and video url (string)
-        else if ((typeof videoUrl === "string") && (typeof pictureUrl === "string")) {
+            await axios.post(`${URL}/api/save_video`, formData, {
+                headers: {
+                    ContentType: "multipart/form-data",
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
             await request(`${URL}/api/news_add`, "POST", {
+                pictureUrl,
+                videoUrl: `${URL}/api/video/${videoUrl.name}`,
+                title,
+                subtitle,
+                text,
+                sourceUrl
+            }, {
+                ContentType: "application/json",
+                Authorization: `Bearer ${token}`
+            });
+            setLoadingFiles(false);
+        }
+        else if (((typeof videoUrl === "string") && (typeof pictureUrl === "string"))) {
+            await request(`${URL}/api/news_add`, "POST", {
+                title,
+                subtitle,
                 pictureUrl,
                 videoUrl,
                 text,
@@ -130,6 +182,7 @@ const NewsAdd = () => {
                             <h4 className="text-blue h4">Новости</h4>
                             <p className="mb-30">Добавте новость</p>
                         </div>
+                        {loadingFiles ? <BarWave/> : null}
                         <div className="pull-right">
                             <Link to="/news">
                                 <button type="button"
@@ -139,6 +192,20 @@ const NewsAdd = () => {
                             <button type="submit" className="btn btn-primary btn-sm scroll-click" rel="content-y"
                                     data-toggle="collapse">Сохранить
                             </button>
+                        </div>
+                    </div>
+
+                    <div className="form-group row">
+                        <label className="col-sm-12 col-md-2 col-form-label">Title</label>
+                        <div className="col-sm-12 col-md-10">
+                            <input className="form-control" type="text" onChange={e => setTitle(e.target.value)}/>
+                        </div>
+                    </div>
+
+                    <div className="form-group row">
+                        <label className="col-sm-12 col-md-2 col-form-label">Subtitle</label>
+                        <div className="col-sm-12 col-md-10">
+                            <input className="form-control" type="text" onChange={e => setSubtitle(e.target.value)}/>
                         </div>
                     </div>
 
@@ -180,7 +247,7 @@ const NewsAdd = () => {
                                    className="custom-control-input"/>
                             <label className="custom-control-label" htmlFor="customRadioVideo">URL видео</label>
                         </div>
-                        <div className="custom-control custom-radio mb-5 ml-4">
+                        <div className="custom-control custom-radio mb-5 ml-5">
                             <input type="radio" id="customRadioVideo2"
                                    name="customRadioVideo"
                                    onClick={radioVideoFileHandler}

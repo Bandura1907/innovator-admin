@@ -98,7 +98,7 @@ const News = () => {
                                     </div>
                                 </div>
                                 <div className="content p-3">
-                                    <h4 className="mt-2"><a href="#" className="text-dark title">TITLE</a></h4>
+                                    <h4 className="mt-2"><Link to={"/viewNews/" + value.id} className="text-dark title">{value.title}</Link></h4>
                                     <p className="text-muted mt-2">{value.text.slice(0, 150)}...</p>
 
                                 </div>
