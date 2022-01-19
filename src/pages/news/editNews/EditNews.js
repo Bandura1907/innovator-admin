@@ -1,5 +1,5 @@
 import {Link, Redirect, useParams} from "react-router-dom";
-import {useCallback, useContext, useEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useRef, useState} from "react";
 import NewsService from "../../../services/news.service";
 import {BarWave} from "react-cssfx-loading";
 import {useHttp} from "../../../hooks/http.hook";
@@ -12,6 +12,8 @@ const EditNews = () => {
     const [redirect, setRedirect] = useState(false);
     const [pictureUrl, setPictureUrl] = useState('');
     const [videoUrl, setVideoUrl] = useState('');
+    const [title, setTitle] = useState('');
+    const [subtitle, setSubtitle] = useState('');
     const [text, setText] = useState('');
     const [sourceUrl, setSourceUrl] = useState('');
     const {loading, request} = useHttp();
@@ -19,6 +21,9 @@ const EditNews = () => {
     const header = {
         Authorization: `Bearer ${token}`
     };
+
+    const radioPhotoLink = useRef();
+    const radioVideoLink = useRef();
 
     const fetchNews = useCallback(async () => {
         try {
@@ -31,6 +36,8 @@ const EditNews = () => {
     }, [id]);
 
     useEffect(() => {
+        radioVideoLink.current.checked = true;
+        radioPhotoLink.current.checked = true;
         fetchNews();
     }, [id]);
 
@@ -73,15 +80,87 @@ const EditNews = () => {
                     </div>
 
                     <div className="form-group row">
-                        <label className="col-sm-12 col-md-2 col-form-label">url картинки</label>
+                        <label className="col-sm-12 col-md-2 col-form-label">Title</label>
                         <div className="col-sm-12 col-md-10">
-                            <input className="form-control" type="text" value={pictureUrl} onChange={e => setPictureUrl(e.target.value)}/>
+                            <input className="form-control" type="text" onChange={e => setTitle(e.target.value)}/>
+                        </div>
+                    </div>
+
+                    <div className="form-group row">
+                        <label className="col-sm-12 col-md-2 col-form-label">Subtitle</label>
+                        <div className="col-sm-12 col-md-10">
+                            <input className="form-control" type="text" onChange={e => setSubtitle(e.target.value)}/>
+                        </div>
+                    </div>
+
+                    <div className="form-group row">
+                        <div className="custom-control custom-radio mb-5 ml-2">
+                            <input type="radio" id="customRadio1" ref={radioPhotoLink}
+                                   name="customRadio"
+                                   // onClick={radioPhotoTextHandler}
+                                   className="custom-control-input"/>
+                            <label className="custom-control-label" htmlFor="customRadio1">URL картинки</label>
+                        </div>
+                        <div className="custom-control custom-radio mb-5 ml-4">
+                            <input type="radio" id="customRadio2"
+                                   name="customRadio"
+                                   // onClick={radioPhotoFileHandler}
+                                   className="custom-control-input"/>
+                            <label className="custom-control-label" htmlFor="customRadio2">Загрузить картинку</label>
+                        </div>
+                    </div>
+                    <div className="form-group row">
+                        <label className="col-sm-12 col-md-2 col-form-label">url картинки</label>
+                        <div className="col-sm-6 col-md-5">
+                            <input className="form-control"
+                                   value={pictureUrl}
+                                   type="text"
+                                   // disabled={photoText}
+                                   onChange={e => setPictureUrl(e.target.value)}/>
+                        </div>
+                        <div className="col-sm-6 col-md-5">
+                            <input type="file" className="custom-file-input" name="picture"
+                                   onChange={e => setPictureUrl(e.target.files[0])}
+                                   accept=".jpg, .jpeg, .png"
+                                   // disabled={photoFile}
+                            />
+                            <label className="custom-file-label">Выбрать файл</label>
+                        </div>
+                    </div>
+
+                    <div className="form-group row">
+                        <div className="custom-control custom-radio mb-5 ml-2">
+                            <input type="radio" id="customRadioVideo"
+                                   name="customRadioVideo"
+                                   // onClick={radioVideoTextHandler}
+                                   ref={radioVideoLink}
+                                   className="custom-control-input"/>
+                            <label className="custom-control-label" htmlFor="customRadioVideo">URL видео</label>
+                        </div>
+                        <div className="custom-control custom-radio mb-5 ml-5">
+                            <input type="radio" id="customRadioVideo2"
+                                   name="customRadioVideo"
+                                   // onClick={radioVideoFileHandler}
+                                   className="custom-control-input"/>
+                            <label className="custom-control-label" htmlFor="customRadioVideo2">Загрузить видео</label>
                         </div>
                     </div>
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">url видео</label>
-                        <div className="col-sm-12 col-md-10">
-                            <input className="form-control" type='text' value={videoUrl} onChange={e => setVideoUrl(e.target.value)}/>
+                        <div className="col-sm-6 col-md-5">
+                            <input className="form-control" type='text' value={videoUrl}
+                                   onChange={e => setVideoUrl(e.target.value)}
+                                   // disabled={videoText}
+                            />
+                        </div>
+                        <div className="col-sm-6 col-md-5">
+                            <input type="file" name="video"
+                                   accept=".mp4"
+                                   className="custom-file-input"
+                                   onChange={e => setVideoUrl(e.target.files[0])}
+                                   // disabled={videoFile}
+                            />
+                            <label className="custom-file-label">Выбрать файл</label>
                         </div>
                     </div>
                     <div className="form-group row">
