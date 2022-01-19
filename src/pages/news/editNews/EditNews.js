@@ -1,6 +1,5 @@
 import {Link, Redirect, useParams} from "react-router-dom";
 import {useCallback, useContext, useEffect, useRef, useState} from "react";
-import NewsService from "../../../services/news.service";
 import {BarWave} from "react-cssfx-loading";
 import {useHttp} from "../../../hooks/http.hook";
 import {AuthContext} from "../../../context/auth-context";
@@ -32,6 +31,8 @@ const EditNews = () => {
             setVideoUrl(news.videoUrl);
             setText(news.text);
             setSourceUrl(news.sourceUrl);
+            setTitle(news.title);
+            setSubtitle(news.subtitle);
         } catch (e) {}
     }, [id]);
 
@@ -46,13 +47,17 @@ const EditNews = () => {
            try {
                await request(`${URL}/api/news_edit/${id}`, "PUT", {
                    pictureUrl,
+                   title,
+                   subtitle,
                    videoUrl,
                    text,
                    sourceUrl
                }, header);
 
                setRedirect(true);
-           } catch (e) {}
+           } catch (e) {
+
+           }
     }
 
     if (redirect)
@@ -82,14 +87,14 @@ const EditNews = () => {
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">Title</label>
                         <div className="col-sm-12 col-md-10">
-                            <input className="form-control" type="text" onChange={e => setTitle(e.target.value)}/>
+                            <input className="form-control" type="text" value={title} onChange={e => setTitle(e.target.value)}/>
                         </div>
                     </div>
 
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">Subtitle</label>
                         <div className="col-sm-12 col-md-10">
-                            <input className="form-control" type="text" onChange={e => setSubtitle(e.target.value)}/>
+                            <input className="form-control" type="text" value={subtitle} onChange={e => setSubtitle(e.target.value)}/>
                         </div>
                     </div>
 
