@@ -1,12 +1,12 @@
 import {useParams} from "react-router-dom";
 import {useCallback, useContext, useEffect, useState} from "react";
-import NewsService from "../../../services/news.service";
 import Plyr from "plyr-react";
 import 'plyr-react/dist/plyr.css';
 import {BarWave} from "react-cssfx-loading";
 import {useHttp} from "../../../hooks/http.hook";
 import {AuthContext} from "../../../context/auth-context";
 import {URL} from "../../../services/url";
+import notFoundImage from '../../../images/notFound.png';
 
 const ViewNews = () => {
     const id = useParams().id;
@@ -37,10 +37,11 @@ const ViewNews = () => {
                         <div className="col-md-12 col-sm-12">
                             <div className="blog-detail card-box overflow-hidden mb-30">
                                 <div className="blog-img">
-                                    <img src={news.pictureUrl} alt="" width="1120"/>
+                                    <img src={news.pictureUrl === "" ? notFoundImage : news.pictureUrl} alt="" width="1120"/>
                                 </div>
                                 <div className="blog-caption">
-                                    <h4 className="mb-10">News title</h4>
+                                    <h4 className="mb-10">{news.title}</h4>
+                                    <h5 className="mb-10">{news.subtitle}</h5>
                                     <p>{news.text}</p>
                                     <h5 className="mb-10">Видео</h5>
 

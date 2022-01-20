@@ -5,6 +5,7 @@ import {AuthContext} from "../../../context/auth-context";
 import {URL} from "../../../services/url";
 import axios from "axios";
 import {BarWave} from "react-cssfx-loading";
+import {ProgressBar} from "react-bootstrap";
 
 const NewsAdd = () => {
 
@@ -27,18 +28,40 @@ const NewsAdd = () => {
     const [videoText, setVideoText] = useState(false);
     const [videoFile, setVideoFile] = useState(true);
 
+    const [uploadPercentage, setUploadPercentage] = useState(0);
+
     const radioPhotoLink = useRef();
     const radioVideoLink = useRef();
 
-    // const photoText = useRef();
-    // const photoFile = useRef();
+    const photoRef = useRef();
+    const videoRef = useRef();
+
     useEffect(() => {
         radioPhotoLink.current.checked = true;
         radioVideoLink.current.checked = true;
+        setPictureUrl("");
+        setVideoUrl("");
+
     }, [])
 
     const saveNews = async (e) => {
         e.preventDefault();
+
+        const options = {
+            onUploadProgress: (progressEvent) => {
+                const {loaded, total} = progressEvent;
+                let percent = Math.floor((loaded * 100) / total);
+                console.log(`${loaded}kb of ${total}kb | ${percent}%`);
+
+                if (percent < 100) {
+                    setUploadPercentage(percent);
+                }
+            },
+            headers: {
+                ContentType: "multipart/form-data",
+                Authorization: `Bearer ${token}`
+            }
+        }
 
         //save video and picture url text
         if (!(typeof pictureUrl === "string") && !(typeof videoUrl === "string")) {
@@ -48,18 +71,9 @@ const NewsAdd = () => {
             formDataPicture.append("picture", pictureUrl);
             formDataVideo.append("video", videoUrl);
 
-            await axios.post(`${URL}/api/save_picture`, formDataPicture, {
-                headers: {
-                    ContentType: "multipart/form-data",
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            await axios.post(`${URL}/api/save_video`, formDataVideo, {
-                headers: {
-                    ContentType: "multipart/form-data",
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            await axios.post(`${URL}/api/save_picture`, formDataPicture, options);
+            await axios.post(`${URL}/api/save_video`, formDataVideo, options);
+
             await request(`${URL}/api/news_add`, "POST", {
                 pictureUrl: `${URL}/api/news/photo/${pictureUrl.name}`,
                 videoUrl: `${URL}/api/video/${videoUrl.name}`,
@@ -81,12 +95,7 @@ const NewsAdd = () => {
             const formData = new FormData();
             formData.append("picture", pictureUrl);
 
-            await axios.post(`${URL}/api/save_picture`, formData, {
-                headers: {
-                    ContentType: "multipart/form-data",
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            await axios.post(`${URL}/api/save_picture`, formData, options);
 
             await request(`${URL}/api/news_add`, "POST", {
                 pictureUrl: `${URL}/api/news/photo/${pictureUrl.name}`,
@@ -108,12 +117,7 @@ const NewsAdd = () => {
             const formData = new FormData();
             formData.append("video", videoUrl);
 
-            await axios.post(`${URL}/api/save_video`, formData, {
-                headers: {
-                    ContentType: "multipart/form-data",
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            await axios.post(`${URL}/api/save_video`, formData, options);
 
             await request(`${URL}/api/news_add`, "POST", {
                 pictureUrl,
@@ -127,8 +131,7 @@ const NewsAdd = () => {
                 Authorization: `Bearer ${token}`
             });
             setLoadingFiles(false);
-        }
-        else if (((typeof videoUrl === "string") && (typeof pictureUrl === "string"))) {
+        } else if (((typeof videoUrl === "string") && (typeof pictureUrl === "string"))) {
             await request(`${URL}/api/news_add`, "POST", {
                 title,
                 subtitle,
@@ -145,6 +148,7 @@ const NewsAdd = () => {
     const radioPhotoFileHandler = e => {
         if (e.target.checked) {
             setPhotoFile(false);
+            setPictureUrl("");
             setPhotoText(true);
         }
     };
@@ -166,6 +170,7 @@ const NewsAdd = () => {
     const radioVideoFileHandler = e => {
         if (e.target.checked) {
             setVideoFile(false);
+            setVideoUrl("");
             setVideoText(true);
         }
     };
@@ -182,7 +187,8 @@ const NewsAdd = () => {
                             <h4 className="text-blue h4">Новости</h4>
                             <p className="mb-30">Добавте новость</p>
                         </div>
-                        {loadingFiles ? <BarWave/> : null}
+                        {/*{loadingFiles ? <BarWave/> : null}*/}
+                        {uploadPercentage > 0 && <ProgressBar now={uploadPercentage} active label={`${uploadPercentage}%`}/>}
                         <div className="pull-right">
                             <Link to="/news">
                                 <button type="button"
@@ -228,6 +234,7 @@ const NewsAdd = () => {
                         <div className="col-sm-6 col-md-5">
                             <input className="form-control"
                                    type="text"
+                                   ref={photoRef}
                                    disabled={photoText}
                                    onChange={e => setPictureUrl(e.target.value)}/>
                         </div>
@@ -259,6 +266,7 @@ const NewsAdd = () => {
                         <label className="col-sm-12 col-md-2 col-form-label">url видео</label>
                         <div className="col-sm-6 col-md-5">
                             <input className="form-control" type='text'
+                                   ref={videoRef}
                                    onChange={e => setVideoUrl(e.target.value)}
                                    disabled={videoText}/>
                         </div>

@@ -55,14 +55,7 @@ const Header = (props) => {
                                   className={"nav-item nav-link " + (active === '/news' ? 'active' : null)}>Новости</Link>
                         </>
                     }
-                    {/*<Link to="/" className={"nav-item nav-link " + (active === '/' ? 'active' : null)}>Аналитика</Link>*/}
-                    {/*<Link to="/news"*/}
-                    {/*      className={"nav-item nav-link " + (active === '/news' ? 'active' : null)}>Новости</Link>*/}
-                    {/*<a href="#" className={"nav-item nav-link " + (active === '/s' ? 'active' : null)}>Полезное</a>*/}
-                    {/*<Link to="/support"*/}
-                    {/*      className={"nav-item nav-link " + (active === '/support' ? 'active' : null)}>Поддержка</Link>*/}
-                    {/*<Link to='/users'*/}
-                    {/*      className={"nav-item nav-link " + (active === '/users' ? 'active' : null)}>Пользователи</Link>*/}
+
                 </div>
 
                 <div className="navbar-nav ml-auto">

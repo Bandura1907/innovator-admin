@@ -89,8 +89,8 @@ const Login = () => {
                                     <div className="input-group mb-0">
 
                                         <button className="btn btn-primary btn-lg btn-block"
-                                                onClick={loginHandler}>Sign
-                                            In
+                                                onClick={loginHandler}>
+                                            Войти
                                         </button>
                                     </div>
                                 </div>
