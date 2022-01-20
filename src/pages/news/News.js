@@ -7,6 +7,7 @@ import {BarWave} from "react-cssfx-loading";
 import {useHttp} from "../../hooks/http.hook";
 import {AuthContext} from "../../context/auth-context";
 import {URL} from "../../services/url";
+import notFoundImage from '../../images/notFound.png';
 
 const News = () => {
     const {loading, request} = useHttp();
@@ -83,7 +84,7 @@ const News = () => {
                         return <div key={value.id} className="col-lg-3 col-md-3 mt-4 pt-2">
                             <div className="blog-post rounded border">
                                 <div className="blog-img d-block overflow-hidden position-relative">
-                                    <img src={value.pictureUrl}
+                                    <img src={value.pictureUrl === "" ? notFoundImage : value.pictureUrl}
                                          className="img-fluid rounded-top" alt="" width="350" height="280"/>
                                     <div className="overlay rounded-top bg-dark"/>
                                     <div className="post-meta">

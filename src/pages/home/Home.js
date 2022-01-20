@@ -1,4 +1,5 @@
 import Chart from 'react-apexcharts';
+import {useEffect} from "react";
 
 const Home = () => {
 
@@ -89,8 +90,9 @@ const Home = () => {
                                     <div className="font-14 text-secondary weight-500">Количество проектов</div>
                                 </div>
                                 <div className="widget-icon">
-                                    <div className="icon" style={{color: "#09cc06"}}><i className="icon-copy fa fa-money"
-                                                                                  aria-hidden="true"/></div>
+                                    <div className="icon" style={{color: "#09cc06"}}><i
+                                        className="icon-copy fa fa-money"
+                                        aria-hidden="true"/></div>
                                 </div>
                             </div>
                         </div>
@@ -162,7 +164,6 @@ const Home = () => {
                     {/*</div>*/}
 
                 </div>
-
 
 
             </div>
