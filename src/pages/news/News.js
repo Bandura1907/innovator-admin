@@ -84,7 +84,7 @@ const News = () => {
                         return <div key={value.id} className="col-lg-3 col-md-3 mt-4 pt-2">
                             <div className="blog-post rounded border">
                                 <div className="blog-img d-block overflow-hidden position-relative">
-                                    <img src={value.pictureUrl === "" ? notFoundImage : value.pictureUrl}
+                                    <img src={value.pictureUrl === "" ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlf91yfOT2B7vCu4ikHj54dlXtsCAo7ZzeCw&usqp=CAU" : value.pictureUrl}
                                          className="img-fluid rounded-top" alt="" width="350" height="280"/>
                                     <div className="overlay rounded-top bg-dark"/>
                                     <div className="post-meta">
@@ -99,7 +99,7 @@ const News = () => {
                                     </div>
                                 </div>
                                 <div className="content p-3">
-                                    <h4 className="mt-2"><Link to={"/viewNews/" + value.id} className="text-dark title">{value.title}</Link></h4>
+                                    <h4 className="mt-2"><Link to={"/viewNews/" + value.id} className="text-dark title">{value.title === "" ? "Заголовок" : value.title}</Link></h4>
                                     <p className="text-muted mt-2">{value.text.slice(0, 150)}...</p>
 
                                 </div>
