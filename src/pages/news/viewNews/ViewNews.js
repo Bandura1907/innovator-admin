@@ -37,7 +37,7 @@ const ViewNews = () => {
                         <div className="col-md-12 col-sm-12">
                             <div className="blog-detail card-box overflow-hidden mb-30">
                                 <div className="blog-img">
-                                    <img src={news.pictureUrl === "" ? notFoundImage : news.pictureUrl} alt="" width="1120"/>
+                                    <img src={news.pictureUrl === "" ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlf91yfOT2B7vCu4ikHj54dlXtsCAo7ZzeCw&usqp=CAU" : news.pictureUrl} alt="" width="1120"/>
                                 </div>
                                 <div className="blog-caption">
                                     <h4 className="mb-10">{news.title}</h4>

@@ -85,14 +85,14 @@ const EditNews = () => {
                     </div>
 
                     <div className="form-group row">
-                        <label className="col-sm-12 col-md-2 col-form-label">Title</label>
+                        <label className="col-sm-12 col-md-2 col-form-label">Заголовок</label>
                         <div className="col-sm-12 col-md-10">
                             <input className="form-control" type="text" value={title} onChange={e => setTitle(e.target.value)}/>
                         </div>
                     </div>
 
                     <div className="form-group row">
-                        <label className="col-sm-12 col-md-2 col-form-label">Subtitle</label>
+                        <label className="col-sm-12 col-md-2 col-form-label">Подзаголовок</label>
                         <div className="col-sm-12 col-md-10">
                             <input className="form-control" type="text" value={subtitle} onChange={e => setSubtitle(e.target.value)}/>
                         </div>

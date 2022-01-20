@@ -36,18 +36,27 @@ const NewsAdd = () => {
     const photoRef = useRef();
     const videoRef = useRef();
 
+    // let source = axios.CancelToken.source();
+
+
     useEffect(() => {
         radioPhotoLink.current.checked = true;
         radioVideoLink.current.checked = true;
         setPictureUrl("");
         setVideoUrl("");
 
+        // return () => {
+        //     if (source) {
+        //         source.cancel("Landing Component got unmounted");
+        //     }
+        // }
     }, [])
 
-    const saveNews = async (e) => {
+    const saveNews = async (e, controller) => {
         e.preventDefault();
 
         const options = {
+            // cancelToken: source.token,
             onUploadProgress: (progressEvent) => {
                 const {loaded, total} = progressEvent;
                 let percent = Math.floor((loaded * 100) / total);
@@ -74,7 +83,7 @@ const NewsAdd = () => {
             await axios.post(`${URL}/api/save_picture`, formDataPicture, options);
             await axios.post(`${URL}/api/save_video`, formDataVideo, options);
 
-            await request(`${URL}/api/news_add`, "POST", {
+            await axios.post(`${URL}/api/news_add`, {
                 pictureUrl: `${URL}/api/news/photo/${pictureUrl.name}`,
                 videoUrl: `${URL}/api/video/${videoUrl.name}`,
                 title,
@@ -82,9 +91,25 @@ const NewsAdd = () => {
                 text,
                 sourceUrl
             }, {
-                ContentType: "application/json",
-                Authorization: `Bearer ${token}`
+                // cancelToken: source.token,
+                headers: {
+                    ContentType: "application/json",
+                    Authorization: `Bearer ${token}`
+                }
             });
+
+            // await request(`${URL}/api/news_add`, "POST", {
+            //     pictureUrl: `${URL}/api/news/photo/${pictureUrl.name}`,
+            //     videoUrl: `${URL}/api/video/${videoUrl.name}`,
+            //     title,
+            //     subtitle,
+            //     text,
+            //     sourceUrl
+            // },
+            //     {
+            //     ContentType: "application/json",
+            //     Authorization: `Bearer ${token}`
+            // });
 
             console.log("upload files success")
             setLoadingFiles(false);
@@ -97,7 +122,7 @@ const NewsAdd = () => {
 
             await axios.post(`${URL}/api/save_picture`, formData, options);
 
-            await request(`${URL}/api/news_add`, "POST", {
+            await axios.post(`${URL}/api/news_add`, {
                 pictureUrl: `${URL}/api/news/photo/${pictureUrl.name}`,
                 title,
                 subtitle,
@@ -105,9 +130,24 @@ const NewsAdd = () => {
                 text,
                 sourceUrl
             }, {
-                ContentType: "application/json",
-                Authorization: `Bearer ${token}`
+                // cancelToken: source.token,
+                headers: {
+                    ContentType: "application/json",
+                    Authorization: `Bearer ${token}`
+                }
             });
+
+            // await request(`${URL}/api/news_add`, "POST", {
+            //     pictureUrl: `${URL}/api/news/photo/${pictureUrl.name}`,
+            //     title,
+            //     subtitle,
+            //     videoUrl,
+            //     text,
+            //     sourceUrl
+            // }, {
+            //     ContentType: "application/json",
+            //     Authorization: `Bearer ${token}`
+            // });
 
             setLoadingFiles(false);
         }
@@ -119,7 +159,7 @@ const NewsAdd = () => {
 
             await axios.post(`${URL}/api/save_video`, formData, options);
 
-            await request(`${URL}/api/news_add`, "POST", {
+            await axios.post(`${URL}/api/news_add`, {
                 pictureUrl,
                 videoUrl: `${URL}/api/video/${videoUrl.name}`,
                 title,
@@ -127,22 +167,52 @@ const NewsAdd = () => {
                 text,
                 sourceUrl
             }, {
-                ContentType: "application/json",
-                Authorization: `Bearer ${token}`
+               // cancelToken: source.token,
+               headers: {
+                   ContentType: "application/json",
+                   Authorization: `Bearer ${token}`
+               }
             });
+            // await request(`${URL}/api/news_add`, "POST", {
+            //     pictureUrl,
+            //     videoUrl: `${URL}/api/video/${videoUrl.name}`,
+            //     title,
+            //     subtitle,
+            //     text,
+            //     sourceUrl
+            // }, {
+            //     ContentType: "application/json",
+            //     Authorization: `Bearer ${token}`
+            // });
             setLoadingFiles(false);
         } else if (((typeof videoUrl === "string") && (typeof pictureUrl === "string"))) {
-            await request(`${URL}/api/news_add`, "POST", {
+            axios.post(`${URL}/api/news_add`, {
                 title,
                 subtitle,
                 pictureUrl,
                 videoUrl,
                 text,
                 sourceUrl
-            }, header);
+            }, {
+                // cancelToken:source.token,
+                headers:{
+                    ContentType: "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            // await request(`${URL}/api/news_add`, "POST", {
+            //     title,
+            //     subtitle,
+            //     pictureUrl,
+            //     videoUrl,
+            //     text,
+            //     sourceUrl
+            // }, header);
         }
 
         setRedirect(true);
+
+
     };
 
     const radioPhotoFileHandler = e => {
@@ -175,6 +245,8 @@ const NewsAdd = () => {
         }
     };
 
+
+
     if (redirect)
         return <Redirect to='/news'/>
 
@@ -188,11 +260,12 @@ const NewsAdd = () => {
                             <p className="mb-30">Добавте новость</p>
                         </div>
                         {/*{loadingFiles ? <BarWave/> : null}*/}
-                        {uploadPercentage > 0 && <ProgressBar now={uploadPercentage} active label={`${uploadPercentage}%`}/>}
+                        {uploadPercentage > 0 &&
+                            <ProgressBar now={uploadPercentage} active label={`${uploadPercentage}%`}/>}
                         <div className="pull-right">
                             <Link to="/news">
                                 <button type="button"
-                                        className="btn btn-outline-danger btn-sm scroll-click m-2">Отмена
+                                        className="btn btn-outline-danger btn-sm scroll-click m-2" >Отмена
                                 </button>
                             </Link>
                             <button type="submit" className="btn btn-primary btn-sm scroll-click" rel="content-y"
@@ -202,14 +275,14 @@ const NewsAdd = () => {
                     </div>
 
                     <div className="form-group row">
-                        <label className="col-sm-12 col-md-2 col-form-label">Title</label>
+                        <label className="col-sm-12 col-md-2 col-form-label">Заголовок</label>
                         <div className="col-sm-12 col-md-10">
                             <input className="form-control" type="text" onChange={e => setTitle(e.target.value)}/>
                         </div>
                     </div>
 
                     <div className="form-group row">
-                        <label className="col-sm-12 col-md-2 col-form-label">Subtitle</label>
+                        <label className="col-sm-12 col-md-2 col-form-label">Подзаголовок</label>
                         <div className="col-sm-12 col-md-10">
                             <input className="form-control" type="text" onChange={e => setSubtitle(e.target.value)}/>
                         </div>
