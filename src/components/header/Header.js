@@ -41,39 +41,43 @@ const Header = (props) => {
                             <Link to="/"
                                   className={"nav-item nav-link " + (active === '/' ? 'active' : null)}>Аналитика</Link>
                             <Link to="/news"
-                                  className={"nav-item nav-link " + (active === '/news' ? 'active' : null)}>Новости</Link>
-                            <a href="#"
-                               className={"nav-item nav-link " + (active === '/s' ? 'active' : null)}>Полезное</a>
+                                  className={"nav-item nav-link " + (active === '/news' || active === '/add-news' ||
+                                  active === `/viewNews/${location.pathname.slice(10)}` ||
+                                  active === `/edit-news/${location.pathname.slice(11)}` ? 'active' : null)}>Новости</Link>
+                            {/*<a href="#"*/}
+                            {/*   className={"nav-item nav-link " + (active === '/s' ? 'active' : null)}>Полезное</a>*/}
                             <Link to="/support"
-                                  className={"nav-item nav-link " + (active === '/support' ? 'active' : null)}>Поддержка</Link>
+                                  className={"nav-item nav-link " + (active === '/support' || active === `/view-support/${location.pathname.slice(14)}` ? 'active' : null)}>Поддержка</Link>
                             <Link to='/users'
-                                  className={"nav-item nav-link " + (active === '/users' ? 'active' : null)}>Пользователи</Link>
+                                  className={"nav-item nav-link " + (active === '/users' || active === `/add-user` ||
+                                  active === `/edit-user/${location.pathname.slice(11)}` ? 'active' : null)}>Пользователи</Link>
                         </> : <>
                             <Link to="/"
                                   className={"nav-item nav-link " + (active === '/' ? 'active' : null)}>Аналитика</Link>
-                            <Link to="/news"
-                                  className={"nav-item nav-link " + (active === '/news' ? 'active' : null)}>Новости</Link>
+                            < Link to="/news"
+                                   className={"nav-item nav-link " + (active === '/news' || active === '/add-news' ||
+                                   active === `/viewNews/${location.pathname.slice(10)}` ||
+                                   active === `/edit-news/${location.pathname.slice(11)}` ? 'active' : null)}>Новости</Link>
                         </>
                     }
 
                 </div>
 
                 <div className="navbar-nav ml-auto">
-                    <a href="#" className="nav-item nav-link notifications"><i className="fa fa-bell-o"/><span
-                        className="badge">1</span></a>
-                    <a href="#" className="nav-item nav-link messages"><i className="fa fa-envelope-o"/><span
-                        className="badge">10</span></a>
+                    {/*<a href="#" className="nav-item nav-link notifications"><i className="fa fa-bell-o"/><span*/}
+                    {/*    className="badge">1</span></a>*/}
+                    {/*<a href="#" className="nav-item nav-link messages"><i className="fa fa-envelope-o"/><span*/}
+                    {/*    className="badge">10</span></a>*/}
                     <div className="nav-item dropdown">
                         <a href="#" data-toggle="dropdown" className="nav-link dropdown-toggle user-action"><img
-                            src={person} className="avatar" alt="Avatar"/> Paula Wilson <b
+                            src={logo} className="avatar" alt="Avatar"/> {props.role === 'admin' ? "ADMIN" : "MANAGER"} <b
                             className="caret"/></a>
                         <div className="dropdown-menu">
-                            <a href="#" className="dropdown-item"><i className="fa fa-user-o"/> Profile</a>
-                            <a href="#" className="dropdown-item"><i className="fa fa-calendar-o"/> Calendar</a>
-                            <a href="#" className="dropdown-item"><i className="fa fa-sliders"/> Settings</a>
-                            <div className="dropdown-divider"/>
-                            <a href="#" onClick={logout} className="dropdown-item"><i
-                                className="material-icons">&#xE8AC;</i> Logout</a>
+                            {/*<a href="#" className="dropdown-item"><i className="fa fa-user-o"/> Profile</a>*/}
+                            {/*<a href="#" className="dropdown-item"><i className="fa fa-calendar-o"/> Calendar</a>*/}
+                            <a href="#" className="dropdown-item" onClick={logout}><i
+                                className="fa fa-close"/> Выйти</a>
+
                         </div>
                     </div>
                 </div>

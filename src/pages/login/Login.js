@@ -27,7 +27,6 @@ const Login = () => {
                 username: form.username,
                 password: form.password
             });
-            console.log(data)
             auth.login(data.token, data.id, data.roles);
         } catch (err) {
             if (err.message === 'Bad credentials'){

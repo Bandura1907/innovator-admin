@@ -34,13 +34,13 @@ const EditNews = () => {
             setTitle(news.title);
             setSubtitle(news.subtitle);
         } catch (e) {}
-    }, [id]);
+    }, []);
 
     useEffect(() => {
         // radioVideoLink.current.checked = true;
         // radioPhotoLink.current.checked = true;
         fetchNews();
-    }, [id]);
+    }, []);
 
     const save = async (e) => {
            e.preventDefault();
