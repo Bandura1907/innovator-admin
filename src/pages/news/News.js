@@ -7,7 +7,6 @@ import {BarWave} from "react-cssfx-loading";
 import {useHttp} from "../../hooks/http.hook";
 import {AuthContext} from "../../context/auth-context";
 import {URL} from "../../services/url";
-import notFoundImage from '../../images/notFound.png';
 
 const News = () => {
     const {loading, request} = useHttp();
@@ -72,8 +71,8 @@ const News = () => {
 
                             <h4 className="mt-2"><Link to="/add-news" className="text-dark title">Добавте свою
                                 новость.</Link></h4>
-                            <p className="text-muted mt-2">There is now an abundance of readable dummy texts.
-                                These are usually used when a text is required purely to fill a space.</p>
+                            {/*<p className="text-muted mt-2">There is now an abundance of readable dummy texts.*/}
+                            {/*    These are usually used when a text is required purely to fill a space.</p>*/}
 
                         </div>
                     </div>

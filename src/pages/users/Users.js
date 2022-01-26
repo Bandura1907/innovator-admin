@@ -67,15 +67,13 @@ const Users = () => {
         }
     }, [token, request]);
 
-    useEffect(() => {
-        fetchUsers();
-    }, [fetchUsers])
+    useEffect(fetchUsers, [fetchUsers])
 
     const deleteUser = async (id) => {
         if (window.confirm("Ви уверены что хотите удалить пользователя?")) {
             try {
-                const fetched = await request(`${URL}/api/delete_user/${id}`, "DELETE", null, header);
-                setData(fetched);
+               const data = await request(`${URL}/api/delete_user/${id}`, "DELETE", null, header);
+                setData(data.users);
             } catch (e) {
             }
         }
