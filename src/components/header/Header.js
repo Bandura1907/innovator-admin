@@ -1,6 +1,5 @@
 import logo from '../../images/logo/Lightbulb.svg';
 import './header.css';
-import person from '../../images/photo1.jpg';
 import {Link, useHistory, useLocation} from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../context/auth-context";

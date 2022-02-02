@@ -1,15 +1,20 @@
 import {Link, Redirect} from "react-router-dom";
 import {useContext, useEffect, useRef, useState} from "react";
-import {useHttp} from "../../../hooks/http.hook";
 import {AuthContext} from "../../../context/auth-context";
 import {URL} from "../../../services/url";
 import axios from "axios";
-import {BarWave} from "react-cssfx-loading";
+import {FilePond, registerPlugin} from "react-filepond";
+import "filepond/dist/filepond.min.css";
 import {ProgressBar} from "react-bootstrap";
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+
+registerPlugin(FilePondPluginFileValidateType, FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 const NewsAdd = () => {
 
-    const [loadingFiles, setLoadingFiles] = useState(false);
     const [redirect, setRedirect] = useState(false);
 
     const [title, setTitle] = useState('');
@@ -18,11 +23,7 @@ const NewsAdd = () => {
     const [videoUrl, setVideoUrl] = useState(null);
     const [text, setText] = useState('');
     const [sourceUrl, setSourceUrl] = useState('');
-    const {loading, request} = useHttp();
     const {token} = useContext(AuthContext);
-    const header = {
-        Authorization: `Bearer ${token}`
-    };
     const [photoText, setPhotoText] = useState(false);
     const [photoFile, setPhotoFile] = useState(true);
     const [videoText, setVideoText] = useState(false);
@@ -36,8 +37,6 @@ const NewsAdd = () => {
     const photoRef = useRef();
     const videoRef = useRef();
 
-    // let source = axios.CancelToken.source();
-
 
     useEffect(() => {
         radioPhotoLink.current.checked = true;
@@ -45,18 +44,12 @@ const NewsAdd = () => {
         setPictureUrl("");
         setVideoUrl("");
 
-        // return () => {
-        //     if (source) {
-        //         source.cancel("Landing Component got unmounted");
-        //     }
-        // }
     }, [])
 
-    const saveNews = async (e, controller) => {
+    const saveNews = async (e) => {
         e.preventDefault();
 
         const options = {
-            // cancelToken: source.token,
             onUploadProgress: (progressEvent) => {
                 const {loaded, total} = progressEvent;
                 let percent = Math.floor((loaded * 100) / total);
@@ -72,20 +65,20 @@ const NewsAdd = () => {
             }
         }
 
+
         //save video and picture url text
         if (!(typeof pictureUrl === "string") && !(typeof videoUrl === "string")) {
-            setLoadingFiles(true);
             const formDataPicture = new FormData();
             const formDataVideo = new FormData();
-            formDataPicture.append("picture", pictureUrl);
-            formDataVideo.append("video", videoUrl);
+            formDataPicture.append("picture", pictureUrl[0].file);
+            formDataVideo.append("video", videoUrl[0].file);
 
             await axios.post(`${URL}/api/save_picture`, formDataPicture, options);
             await axios.post(`${URL}/api/save_video`, formDataVideo, options);
 
             await axios.post(`${URL}/api/news_add`, {
-                pictureUrl: `${URL}/api/news/photo/${pictureUrl.name}`,
-                videoUrl: `${URL}/api/video/${videoUrl.name}`,
+                pictureUrl: `${URL}/api/news/photo/${pictureUrl[0].file.name}`,
+                videoUrl: `${URL}/api/video/${videoUrl[0].file.name}`,
                 title,
                 subtitle,
                 text,
@@ -98,32 +91,17 @@ const NewsAdd = () => {
                 }
             });
 
-            // await request(`${URL}/api/news_add`, "POST", {
-            //     pictureUrl: `${URL}/api/news/photo/${pictureUrl.name}`,
-            //     videoUrl: `${URL}/api/video/${videoUrl.name}`,
-            //     title,
-            //     subtitle,
-            //     text,
-            //     sourceUrl
-            // },
-            //     {
-            //     ContentType: "application/json",
-            //     Authorization: `Bearer ${token}`
-            // });
-
             console.log("upload files success")
-            setLoadingFiles(false);
         }
         //save video url (string) and picture file
         else if (!(typeof pictureUrl === "string") && typeof videoUrl === "string") {
-            setLoadingFiles(true);
             const formData = new FormData();
-            formData.append("picture", pictureUrl);
+            formData.append("picture", pictureUrl[0].file);
 
             await axios.post(`${URL}/api/save_picture`, formData, options);
 
             await axios.post(`${URL}/api/news_add`, {
-                pictureUrl: `${URL}/api/news/photo/${pictureUrl.name}`,
+                pictureUrl: `${URL}/api/news/photo/${pictureUrl[0].file.name}`,
                 title,
                 subtitle,
                 videoUrl,
@@ -137,56 +115,29 @@ const NewsAdd = () => {
                 }
             });
 
-            // await request(`${URL}/api/news_add`, "POST", {
-            //     pictureUrl: `${URL}/api/news/photo/${pictureUrl.name}`,
-            //     title,
-            //     subtitle,
-            //     videoUrl,
-            //     text,
-            //     sourceUrl
-            // }, {
-            //     ContentType: "application/json",
-            //     Authorization: `Bearer ${token}`
-            // });
-
-            setLoadingFiles(false);
         }
         //save picture url (string) and video file
         else if (typeof pictureUrl === "string" && !(typeof videoUrl === "string")) {
-            setLoadingFiles(true);
             const formData = new FormData();
-            formData.append("video", videoUrl);
+            formData.append("video", videoUrl[0].file);
 
             await axios.post(`${URL}/api/save_video`, formData, options);
 
             await axios.post(`${URL}/api/news_add`, {
                 pictureUrl,
-                videoUrl: `${URL}/api/video/${videoUrl.name}`,
+                videoUrl: `${URL}/api/video/${videoUrl[0].file.name}`,
                 title,
                 subtitle,
                 text,
                 sourceUrl
             }, {
-               // cancelToken: source.token,
-               headers: {
-                   ContentType: "application/json",
-                   Authorization: `Bearer ${token}`
-               }
+                headers: {
+                    ContentType: "application/json",
+                    Authorization: `Bearer ${token}`
+                }
             });
-            // await request(`${URL}/api/news_add`, "POST", {
-            //     pictureUrl,
-            //     videoUrl: `${URL}/api/video/${videoUrl.name}`,
-            //     title,
-            //     subtitle,
-            //     text,
-            //     sourceUrl
-            // }, {
-            //     ContentType: "application/json",
-            //     Authorization: `Bearer ${token}`
-            // });
-            setLoadingFiles(false);
         } else if (((typeof videoUrl === "string") && (typeof pictureUrl === "string"))) {
-            axios.post(`${URL}/api/news_add`, {
+            await axios.post(`${URL}/api/news_add`, {
                 title,
                 subtitle,
                 pictureUrl,
@@ -194,20 +145,11 @@ const NewsAdd = () => {
                 text,
                 sourceUrl
             }, {
-                // cancelToken:source.token,
-                headers:{
+                headers: {
                     ContentType: "application/json",
                     Authorization: `Bearer ${token}`
                 }
             })
-            // await request(`${URL}/api/news_add`, "POST", {
-            //     title,
-            //     subtitle,
-            //     pictureUrl,
-            //     videoUrl,
-            //     text,
-            //     sourceUrl
-            // }, header);
         }
 
         setRedirect(true);
@@ -246,7 +188,6 @@ const NewsAdd = () => {
     };
 
 
-
     if (redirect)
         return <Redirect to='/news'/>
 
@@ -259,13 +200,12 @@ const NewsAdd = () => {
                             <h4 className="text-blue h4">Новости</h4>
                             <p className="mb-30">Добавте новость</p>
                         </div>
-                        {/*{loadingFiles ? <BarWave/> : null}*/}
                         {uploadPercentage > 0 &&
                             <ProgressBar now={uploadPercentage} active label={`${uploadPercentage}%`}/>}
                         <div className="pull-right">
                             <Link to="/news">
                                 <button type="button"
-                                        className="btn btn-outline-danger btn-sm scroll-click m-2" >Отмена
+                                        className="btn btn-outline-danger btn-sm scroll-click m-2">Отмена
                                 </button>
                             </Link>
                             <button type="submit" className="btn btn-primary btn-sm scroll-click" rel="content-y"
@@ -312,11 +252,15 @@ const NewsAdd = () => {
                                    onChange={e => setPictureUrl(e.target.value)}/>
                         </div>
                         <div className="col-sm-6 col-md-5">
-                            <input type="file" className="custom-file-input" name="picture"
-                                   onChange={e => setPictureUrl(e.target.files[0])}
-                                   accept=".jpg, .jpeg, .png"
-                                   disabled={photoFile}/>
-                            <label className="custom-file-label">Выбрать файл</label>
+                            <FilePond
+                                files={pictureUrl}
+                                allowReorder={true}
+                                onupdatefiles={setPictureUrl}
+                                disabled={photoFile}
+                                allowFileTypeValidation={true}
+                                acceptedFileTypes={['image/jpg', 'image/jpeg', 'image/png']}
+                                labelIdle='Загрузить картинку (.jpg .jpeg .png)'
+                            />
                         </div>
                     </div>
 
@@ -344,12 +288,15 @@ const NewsAdd = () => {
                                    disabled={videoText}/>
                         </div>
                         <div className="col-sm-6 col-md-5">
-                            <input type="file" name="video"
-                                   accept=".mp4"
-                                   className="custom-file-input"
-                                   onChange={e => setVideoUrl(e.target.files[0])}
-                                   disabled={videoFile}/>
-                            <label className="custom-file-label">Выбрать файл</label>
+                            <FilePond
+                                files={videoUrl}
+                                allowReorder={true}
+                                onupdatefiles={setVideoUrl}
+                                disabled={videoFile}
+                                allowFileTypeValidation={true}
+                                acceptedFileTypes={['video/mp4']}
+                                labelIdle='Загрузить видео (.mp4)'
+                            />
                         </div>
                     </div>
                     <div className="form-group row">

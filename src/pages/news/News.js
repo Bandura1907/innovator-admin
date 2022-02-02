@@ -95,9 +95,12 @@ const News = () => {
                                             <i className="mdi mdi-chevron-right"/></Link>
                                         <a href="#" className="text-light d-block text-right"
                                            onClick={() => deleteNews(value.id)}>Удалить</a>
+
                                     </div>
+
                                 </div>
                                 <div className="content p-3">
+                                    {value.user === undefined ? null : <p><i className="fas fa-user"/> {value.user.roles[0].name === "ROLE_ADMIN" ? "ADMIN" : "MANAGER"}</p>}
                                     <h4 className="mt-2"><Link to={"/viewNews/" + value.id} className="text-dark title">{value.title === "" ? "Заголовок" : value.title}</Link></h4>
                                     <p className="text-muted mt-2">{value.text.slice(0, 150)}...</p>
 
