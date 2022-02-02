@@ -78,13 +78,13 @@ const EditUser = () => {
                         <label className="col-sm-12 col-md-2 col-form-label">Полное имя</label>
                         <div className="col-sm-12 col-md-10">
                             <input className="form-control" type="text" onChange={e => setFullName(e.target.value)}
-                                   value={fullName}/>
+                                   required={true}/>
                         </div>
                     </div>
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">Email</label>
                         <div className="col-sm-12 col-md-10">
-                            <input className="form-control" onChange={e => setEmail(e.target.value)} value={email}/>
+                            <input className="form-control" onChange={e => setEmail(e.target.value)} value={email.trim()} required={true}/>
                         </div>
                     </div>
                     <div className="form-group row">

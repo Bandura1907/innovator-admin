@@ -82,7 +82,7 @@ const ViewSupport = () => {
             setSubjectEmpty(false);
             messageRef.current.className = "form-control";
             subjectRef.current.className = "form-control";
-            axios.post(`${URL}/api/report/sendMail`,  {
+            axios.post(`${URL}/api/report/sendMail`, {
                 to: report.customEmail,
                 subject: subjectRef.current.value,
                 text: messageRef.current.value
@@ -124,7 +124,7 @@ const ViewSupport = () => {
                 </div>
             </div>
 
-            <div className="card mb-4">
+            <div className="card-box mb-4">
 
                 <div className="card-body">
                     <div className="blog-caption">
@@ -132,12 +132,12 @@ const ViewSupport = () => {
                         <p>{report.messageText}</p>
                     </div>
 
-                    <div className="pull-right">
-                        <button onClick={solveProblem} type="submit" className="btn btn-primary btn-sm scroll-click"
-                                rel="content-y"
-                                data-toggle="collapse">Проблема решена
-                        </button>
-                    </div>
+
+                    <button onClick={solveProblem} type="submit" className="btn btn-primary btn-sm scroll-click"
+                            rel="content-y"
+                            data-toggle="collapse">Проблема решена
+                    </button>
+
                 </div>
             </div>
 
