@@ -32,7 +32,7 @@ const Users = () => {
         },
         {
             name: "Photo url",
-            selector: (row) => row.photoUrl.slice(0, 100),
+            selector: (row) => !row.photoUrl ? "" : row.photoUrl.slice(0, 100),
             sortable: true,
             right: true
         },
@@ -72,7 +72,7 @@ const Users = () => {
     const deleteUser = async (id) => {
         if (window.confirm("Ви уверены что хотите удалить пользователя?")) {
             try {
-               const data = await request(`${URL}/api/delete_user/${id}`, "DELETE", null, header);
+                const data = await request(`${URL}/api/delete_user/${id}`, "DELETE", null, header);
                 setData(data.users);
             } catch (e) {
             }
@@ -81,25 +81,26 @@ const Users = () => {
 
 
     return (
-        loading ? <BarWave className="loaderBar"/> : <div className="main-container">
+        loading ? <BarWave className="loaderBar"/> :
+            <div className="main-container">
+                <div className="pd-20 card-box mb-30">
 
-            <div className="pd-20 card-box mb-30">
+                    <div className="title pb-20">
+                        <h2 className="h3 mb-0">Пользователи</h2>
+                    </div>
+                    <div className="pull-right">
+                        <Link to="/add-user" type="submit" className="btn btn-primary btn-sm scroll-click"
+                              rel="content-y"
+                              data-toggle="collapse">Добавить
+                        </Link>
+                    </div>
+                    <DataTable columns={columns}
+                               data={data}
+                        // selectableRows
+                               pagination/>
 
-                <div className="title pb-20">
-                    <h2 className="h3 mb-0">Пользователи</h2>
                 </div>
-                <div className="pull-right">
-                    <Link to="/add-user" type="submit" className="btn btn-primary btn-sm scroll-click"
-                          rel="content-y"
-                          data-toggle="collapse">Добавить
-                    </Link>
-                </div>
-                <DataTable columns={columns} data={data}
-                    // selectableRows
-                           pagination/>
-
             </div>
-        </div>
     )
 };
 
