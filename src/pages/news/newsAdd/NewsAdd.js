@@ -19,8 +19,8 @@ const NewsAdd = () => {
 
     const [title, setTitle] = useState('');
     const [subtitle, setSubtitle] = useState('');
-    const [pictureUrl, setPictureUrl] = useState(null);
-    const [videoUrl, setVideoUrl] = useState(null);
+    const [pictureUrlFile, setPictureUrlFile] = useState(null);
+    const [videoUrlFIle, setVideoUrlFile] = useState(null);
     const [text, setText] = useState('');
     const [sourceUrl, setSourceUrl] = useState('');
     const {token} = useContext(AuthContext);
@@ -41,8 +41,8 @@ const NewsAdd = () => {
     useEffect(() => {
         radioPhotoLink.current.checked = true;
         radioVideoLink.current.checked = true;
-        setPictureUrl("");
-        setVideoUrl("");
+        setPictureUrlFile("");
+        setVideoUrlFile("");
 
     }, [])
 
@@ -67,18 +67,18 @@ const NewsAdd = () => {
 
 
         //save video and picture url text
-        if (!(typeof pictureUrl === "string") && !(typeof videoUrl === "string")) {
+        if (!(typeof pictureUrlFile === "string") && !(typeof videoUrlFIle === "string")) {
             const formDataPicture = new FormData();
             const formDataVideo = new FormData();
-            formDataPicture.append("picture", pictureUrl[0].file);
-            formDataVideo.append("video", videoUrl[0].file);
+            formDataPicture.append("picture", pictureUrlFile[0].file);
+            formDataVideo.append("video", videoUrlFIle[0].file);
 
             await axios.post(`${URL}/api/save_picture`, formDataPicture, options);
             await axios.post(`${URL}/api/save_video`, formDataVideo, options);
 
             await axios.post(`${URL}/api/news_add`, {
-                pictureUrl: `${URL}/api/news/photo/${pictureUrl[0].file.name}`,
-                videoUrl: `${URL}/api/video/${videoUrl[0].file.name}`,
+                pictureUrl: `${URL}/api/news/photo/${pictureUrlFile[0].file.name}`,
+                videoUrl: `${URL}/api/video/${videoUrlFIle[0].file.name}`,
                 title,
                 subtitle,
                 text,
@@ -94,17 +94,17 @@ const NewsAdd = () => {
             console.log("upload files success")
         }
         //save video url (string) and picture file
-        else if (!(typeof pictureUrl === "string") && typeof videoUrl === "string") {
+        else if (!(typeof pictureUrlFile === "string") && typeof videoUrlFIle === "string") {
             const formData = new FormData();
-            formData.append("picture", pictureUrl[0].file);
+            formData.append("picture", pictureUrlFile[0].file);
 
             await axios.post(`${URL}/api/save_picture`, formData, options);
 
             await axios.post(`${URL}/api/news_add`, {
-                pictureUrl: `${URL}/api/news/photo/${pictureUrl[0].file.name}`,
+                pictureUrl: `${URL}/api/news/photo/${pictureUrlFile[0].file.name}`,
                 title,
                 subtitle,
-                videoUrl,
+                videoUrl: videoUrlFIle,
                 text,
                 sourceUrl
             }, {
@@ -117,15 +117,15 @@ const NewsAdd = () => {
 
         }
         //save picture url (string) and video file
-        else if (typeof pictureUrl === "string" && !(typeof videoUrl === "string")) {
+        else if (typeof pictureUrlFile === "string" && !(typeof videoUrlFIle === "string")) {
             const formData = new FormData();
-            formData.append("video", videoUrl[0].file);
+            formData.append("video", videoUrlFIle[0].file);
 
             await axios.post(`${URL}/api/save_video`, formData, options);
 
             await axios.post(`${URL}/api/news_add`, {
-                pictureUrl,
-                videoUrl: `${URL}/api/video/${videoUrl[0].file.name}`,
+                pictureUrl: pictureUrlFile,
+                videoUrl: `${URL}/api/video/${videoUrlFIle[0].file.name}`,
                 title,
                 subtitle,
                 text,
@@ -136,12 +136,12 @@ const NewsAdd = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-        } else if (((typeof videoUrl === "string") && (typeof pictureUrl === "string"))) {
+        } else if (((typeof videoUrlFIle === "string") && (typeof pictureUrlFile === "string"))) {
             await axios.post(`${URL}/api/news_add`, {
                 title,
                 subtitle,
-                pictureUrl,
-                videoUrl,
+                pictureUrl: pictureUrlFile,
+                videoUrl: videoUrlFIle,
                 text,
                 sourceUrl
             }, {
@@ -160,7 +160,7 @@ const NewsAdd = () => {
     const radioPhotoFileHandler = e => {
         if (e.target.checked) {
             setPhotoFile(false);
-            setPictureUrl("");
+            setPictureUrlFile("");
             setPhotoText(true);
         }
     };
@@ -182,7 +182,7 @@ const NewsAdd = () => {
     const radioVideoFileHandler = e => {
         if (e.target.checked) {
             setVideoFile(false);
-            setVideoUrl("");
+            setVideoUrlFile("");
             setVideoText(true);
         }
     };
@@ -217,7 +217,7 @@ const NewsAdd = () => {
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">Заголовок</label>
                         <div className="col-sm-12 col-md-10">
-                            <input className="form-control" type="text" onChange={e => setTitle(e.target.value)}/>
+                            <input className="form-control" type="text" onChange={e => setTitle(e.target.value)} required={true}/>
                         </div>
                     </div>
 
@@ -249,13 +249,13 @@ const NewsAdd = () => {
                                    type="text"
                                    ref={photoRef}
                                    disabled={photoText}
-                                   onChange={e => setPictureUrl(e.target.value)}/>
+                                   onChange={e => setPictureUrlFile(e.target.value)}/>
                         </div>
                         <div className="col-sm-6 col-md-5">
                             <FilePond
-                                files={pictureUrl}
+                                // files={pictureUrlFile}
                                 allowReorder={true}
-                                onupdatefiles={setPictureUrl}
+                                onupdatefiles={setPictureUrlFile}
                                 disabled={photoFile}
                                 allowFileTypeValidation={true}
                                 acceptedFileTypes={['image/jpg', 'image/jpeg', 'image/png']}
@@ -284,14 +284,14 @@ const NewsAdd = () => {
                         <div className="col-sm-6 col-md-5">
                             <input className="form-control" type='text'
                                    ref={videoRef}
-                                   onChange={e => setVideoUrl(e.target.value)}
+                                   onChange={e => setVideoUrlFile(e.target.value)}
                                    disabled={videoText}/>
                         </div>
                         <div className="col-sm-6 col-md-5">
                             <FilePond
-                                files={videoUrl}
+                                // files={videoUrlFIle}
                                 allowReorder={true}
-                                onupdatefiles={setVideoUrl}
+                                onupdatefiles={setVideoUrlFile}
                                 disabled={videoFile}
                                 allowFileTypeValidation={true}
                                 acceptedFileTypes={['video/mp4']}
@@ -302,7 +302,7 @@ const NewsAdd = () => {
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">Текст</label>
                         <div className="col-sm-12 col-md-10">
-                            <textarea className="form-control" onChange={e => setText(e.target.value)}/>
+                            <textarea className="form-control" onChange={e => setText(e.target.value)} required={true}/>
                         </div>
                     </div>
 
