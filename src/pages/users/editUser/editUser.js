@@ -77,7 +77,7 @@ const EditUser = () => {
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">Полное имя</label>
                         <div className="col-sm-12 col-md-10">
-                            <input className="form-control" type="text" onChange={e => setFullName(e.target.value)}
+                            <input className="form-control" type="text" value={fullName} onChange={e => setFullName(e.target.value)}
                                    required={true}/>
                         </div>
                     </div>
