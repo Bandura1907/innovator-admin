@@ -32,7 +32,7 @@ const Support = () => {
         },
         {
             name: "Текс обращения",
-            selector: row => row.messageText,
+            selector: row => !row.messageText ? "" : row.messageText.slice(0, 40),
             sortable: true
         },
         {
