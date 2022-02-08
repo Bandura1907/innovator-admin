@@ -2,9 +2,9 @@ import DataTable from 'react-data-table-component';
 import {useCallback, useContext, useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import {BarWave} from "react-cssfx-loading";
-import {useHttp} from "../../hooks/http.hook";
 import {URL} from "../../services/url";
 import {AuthContext} from "../../context/auth-context";
+import axios from "axios";
 
 
 const Users = () => {
@@ -51,9 +51,8 @@ const Users = () => {
         }
     ];
 
-    // const [isLoading, setIsLoading] = useState(true);
-    const [data, setData] = useState([]);
-    const {loading, request} = useHttp();
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
     const {token} = useContext(AuthContext);
     const header = {
         Authorization: `Bearer ${token}`
@@ -61,19 +60,20 @@ const Users = () => {
 
     const fetchUsers = useCallback(async () => {
         try {
-            const fetched = await request(`${URL}/api/all_users`, "GET", null, header);
-            setData(fetched);
+            const fetched = await axios.get(`${URL}/api/all_users`, {headers: header});
+            setUsers(fetched.data);
+            setLoading(false);
         } catch (e) {
         }
-    }, [token, request]);
+    }, []);
 
-    useEffect(fetchUsers, [fetchUsers])
+    useEffect(fetchUsers, [])
 
     const deleteUser = async (id) => {
         if (window.confirm("Ви уверены что хотите удалить пользователя?")) {
             try {
-                const data = await request(`${URL}/api/delete_user/${id}`, "DELETE", null, header);
-                setData(data.users);
+                await axios.delete(`${URL}/api/delete_user/${id}`, {headers: header});
+                setUsers(users.filter(x => x.clientId !== id));
             } catch (e) {
             }
         }
@@ -95,7 +95,7 @@ const Users = () => {
                         </Link>
                     </div>
                     <DataTable columns={columns}
-                               data={data}
+                               data={users}
                         // selectableRows
                                pagination/>
 

@@ -2,9 +2,9 @@ import DataTable from 'react-data-table-component';
 import {useCallback, useContext, useEffect, useState} from "react";
 import {BarWave} from "react-cssfx-loading";
 import {Link} from "react-router-dom";
-import {useHttp} from "../../hooks/http.hook";
 import {AuthContext} from "../../context/auth-context";
 import {URL} from "../../services/url";
+import axios from "axios";
 
 const Support = () => {
 
@@ -89,7 +89,7 @@ const Support = () => {
     }
 
     const [reports, setReports] = useState([]);
-    const {loading, request} = useHttp();
+    const [loading, setLoading] = useState(true);
     const {token} = useContext(AuthContext);
     const header = {
         Authorization: `Bearer ${token}`
@@ -97,22 +97,19 @@ const Support = () => {
 
     const fetchReports = useCallback(async () => {
         try {
-            const reports = await request(`${URL}/api/all_reports`, "GET", null, header)
-
-            setReports(reports);
+            const fetchedReports = await axios.get(`${URL}/api/all_reports`, {headers: header});
+            setReports(fetchedReports.data);
+            setLoading(false);
         } catch (e) {}
     }, []);
 
-    useEffect(() => {
-        fetchReports();
-    }, []);
+    useEffect(fetchReports, []);
 
     const deleteReport = async (id) => {
         if (window.confirm("Вы уверены что хотите удалить данную проблему?")) {
             try {
-                const newReports = await request(`${URL}/api/report_error_delete/${id}`, "DELETE", null, header);
-
-                setReports(newReports);
+                await axios.delete(`${URL}/api/report_error_delete/${id}`, {headers: header});
+                setReports(reports.filter(x => x.id !== id));
             } catch (e) {}
         }
 

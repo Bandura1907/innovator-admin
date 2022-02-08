@@ -1,14 +1,12 @@
 import {useContext, useState} from "react";
-import UserService from "../../../services/user.service";
 import {Link, Redirect} from "react-router-dom";
-import {useHttp} from "../../../hooks/http.hook";
 import {AuthContext} from "../../../context/auth-context";
 import {URL} from "../../../services/url";
+import axios from "axios";
 
 const AddUser = () => {
 
     const [redirect, setRedirect] = useState(false);
-    const {request} = useHttp();
     const {token} = useContext(AuthContext);
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
@@ -19,11 +17,11 @@ const AddUser = () => {
 
     const saveUser = async (e) => {
         e.preventDefault();
-        await request(`${URL}/api/add_user`, "POST", {
+        await axios.post(`${URL}/api/add_user`, {
             fullName,
             email,
             photoUrl
-        }, header);
+        }, {headers: header});
 
         setRedirect(true);
     };
@@ -41,7 +39,9 @@ const AddUser = () => {
                         </div>
                         <div className="pull-right">
                             <Link to="/users">
-                                <button type="button" className="btn btn-outline-danger btn-sm scroll-click m-2">Отмена</button>
+                                <button type="button"
+                                        className="btn btn-outline-danger btn-sm scroll-click m-2">Отмена
+                                </button>
                             </Link>
                             <button type="submit" className="btn btn-primary btn-sm scroll-click" rel="content-y"
                                     data-toggle="collapse">Сохранить
@@ -52,13 +52,15 @@ const AddUser = () => {
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">Полное имя</label>
                         <div className="col-sm-12 col-md-10">
-                            <input className="form-control" type="text" onChange={e => setFullName(e.target.value)} required={true}/>
+                            <input className="form-control" type="text" onChange={e => setFullName(e.target.value)}
+                                   required={true}/>
                         </div>
                     </div>
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">Email</label>
                         <div className="col-sm-12 col-md-10">
-                            <input className="form-control" value={email.trim()} onChange={e => setEmail(e.target.value)} required={true}/>
+                            <input className="form-control" value={email.trim()}
+                                   onChange={e => setEmail(e.target.value)} required={true}/>
                         </div>
                     </div>
                     <div className="form-group row">

@@ -1,16 +1,16 @@
 import {Link, Redirect, useParams} from "react-router-dom";
 import {useCallback, useContext, useEffect, useState} from "react";
 import {BarWave} from "react-cssfx-loading";
-import {useHttp} from "../../../hooks/http.hook";
 import {URL} from "../../../services/url";
 import {AuthContext} from "../../../context/auth-context";
+import axios from "axios";
 
 const EditUser = () => {
 
     const id = useParams().id;
 
     const [redirect, setRedirect] = useState(false);
-    const {loading, request} = useHttp();
+    const [loading, setLoading] = useState(true);
     const {token} = useContext(AuthContext);
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
@@ -21,33 +21,33 @@ const EditUser = () => {
 
     const fetchUser = useCallback(async () => {
         try {
-            const fetched = await request(`${URL}/api/user_by_id/${id}`, "GET", null, header);
-            setEmail(fetched.email);
-            setFullName(fetched.fullName);
-            setPhotoUrl(fetched.photoUrl);
+            const fetched = await axios.get(`${URL}/api/user_by_id/${id}`, {headers: header});
+            setEmail(fetched.data.email);
+            setFullName(fetched.data.fullName);
+            setPhotoUrl(fetched.data.photoUrl);
+            setLoading(false);
         } catch (e) {
         }
-    }, [request, token]);
+    }, [token]);
 
     const saveUser = useCallback(async () => {
 
     }, []);
 
-    useEffect(() => {
-        fetchUser();
-    }, []);
+    useEffect(fetchUser, []);
 
     const save = async (e) => {
         e.preventDefault();
         try {
-            await request(`${URL}/api/update_user/${id}`, "PUT", {
+            await axios.put(`${URL}/api/update_user/${id}`, {
                 email,
                 photoUrl,
                 fullName
-            }, header);
+            }, {headers: header});
 
             setRedirect(true);
-        } catch (e) {}
+        } catch (e) {
+        }
     };
 
     if (redirect) {
@@ -77,14 +77,16 @@ const EditUser = () => {
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">Полное имя</label>
                         <div className="col-sm-12 col-md-10">
-                            <input className="form-control" type="text" value={fullName} onChange={e => setFullName(e.target.value)}
+                            <input className="form-control" type="text" value={fullName}
+                                   onChange={e => setFullName(e.target.value)}
                                    required={true}/>
                         </div>
                     </div>
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">Email</label>
                         <div className="col-sm-12 col-md-10">
-                            <input className="form-control" onChange={e => setEmail(e.target.value)} value={email.trim()} required={true}/>
+                            <input className="form-control" onChange={e => setEmail(e.target.value)}
+                                   value={email.trim()} required={true}/>
                         </div>
                     </div>
                     <div className="form-group row">

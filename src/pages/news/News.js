@@ -4,27 +4,28 @@ import {Link} from "react-router-dom";
 import {useCallback, useContext, useEffect, useState} from "react";
 import Pagination from "@material-ui/lab/Pagination";
 import {BarWave} from "react-cssfx-loading";
-import {useHttp} from "../../hooks/http.hook";
 import {AuthContext} from "../../context/auth-context";
 import {URL} from "../../services/url";
+import axios from "axios";
 
 const News = () => {
-    const {loading, request} = useHttp();
     const {token} = useContext(AuthContext);
     const [news, setNews] = useState([]);
     const [page, setPage] = useState(1);
     const [count, setCount] = useState(0);
+    const [loading, setLoading] = useState(true);
     const header = {
         Authorization: `Bearer ${token}`
     };
 
     const fetchNews = useCallback(async () => {
         try {
-            const fetchedNews = await request(`${URL}/api/news_for_front?page=${page - 1}`, "GET", null, header);
-
-            setNews(fetchedNews.news);
-            setCount(fetchedNews.totalPages);
-        } catch (e) {}
+            const fetchedNews = await axios.get(`${URL}/api/news_for_front?page=${page - 1}`, {headers: header});
+            setNews(fetchedNews.data.news);
+            setCount(fetchedNews.data.totalPages);
+            setLoading(false);
+        } catch (e) {
+        }
     }, [page]);
 
     useEffect(fetchNews, [page]);
@@ -35,13 +36,14 @@ const News = () => {
 
     const deleteNews = async id => {
         try {
-           if (window.confirm("Вы уверены что хотите удалить новость?")) {
-               const fetchedNews = await request(`${URL}/api/delete_news/${id}?page=${page - 1}`, "DELETE", null, header);
-               setNews(fetchedNews.news);
-               setCount(fetchedNews.totalPages);
-           }
+            if (window.confirm("Вы уверены что хотите удалить новость?")) {
+                const fetchedNews = await axios.delete(`${URL}/api/delete_news/${id}?page=${page - 1}`, {headers: header});
+                setNews(news.filter(x => x.id !== id));
+                setCount(fetchedNews.data.totalPages);
+            }
 
-        } catch (e) {}
+        } catch (e) {
+        }
     };
 
     return (
@@ -83,8 +85,9 @@ const News = () => {
                         return <div key={value.id} className="col-lg-3 col-md-3 mt-4 pt-2">
                             <div className="blog-post rounded border">
                                 <div className="blog-img d-block overflow-hidden position-relative">
-                                    <img src={value.pictureUrl === "" ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlf91yfOT2B7vCu4ikHj54dlXtsCAo7ZzeCw&usqp=CAU" : value.pictureUrl}
-                                         className="img-fluid rounded-top" alt="" width="350" height="280"/>
+                                    <img
+                                        src={value.pictureUrl === "" ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlf91yfOT2B7vCu4ikHj54dlXtsCAo7ZzeCw&usqp=CAU" : value.pictureUrl}
+                                        className="img-fluid rounded-top" alt="" width="350" height="280"/>
                                     <div className="overlay rounded-top bg-dark"/>
                                     <div className="post-meta">
                                         {/*<a href="javascript:void(0)" className="text-light d-block text-right like">*/}
@@ -100,8 +103,12 @@ const News = () => {
 
                                 </div>
                                 <div className="content p-3">
-                                    {value.user === undefined ? null : <p><i className="fas fa-user"/> {value.user.roles[0].name === "ROLE_ADMIN" ? "ADMIN" : "MANAGER"}</p>}
-                                    <h4 className="mt-2"><Link to={"/viewNews/" + value.id} className="text-dark title">{value.title === "" ? "Заголовок" : value.title}</Link></h4>
+                                    {value.user === undefined ? null : <p><i
+                                        className="fas fa-user"/> {value.user.roles[0].name === "ROLE_ADMIN" ? "ADMIN" : "MANAGER"}
+                                    </p>}
+                                    <h4 className="mt-2"><Link to={"/viewNews/" + value.id}
+                                                               className="text-dark title">{value.title === "" ? "Заголовок" : value.title}</Link>
+                                    </h4>
                                     <p className="text-muted mt-2">{value.text.slice(0, 150)}...</p>
 
                                 </div>

@@ -3,15 +3,14 @@ import {useCallback, useContext, useEffect, useState} from "react";
 import Plyr from "plyr-react";
 import 'plyr-react/dist/plyr.css';
 import {BarWave} from "react-cssfx-loading";
-import {useHttp} from "../../../hooks/http.hook";
 import {AuthContext} from "../../../context/auth-context";
 import {URL} from "../../../services/url";
-import notFoundImage from '../../../images/notFound.png';
+import axios from "axios";
 
 const ViewNews = () => {
     const id = useParams().id;
 
-    const {loading, request} = useHttp();
+    const [loading, setLoading] = useState(true);
     const {token} = useContext(AuthContext);
     const [news, setNews] = useState({});
     const header = {
@@ -20,14 +19,15 @@ const ViewNews = () => {
 
     const fetchNews = useCallback(async () => {
         try {
-            const news = await request(`${URL}/api/news_id/${id}`, "GET", null, header);
-            setNews(news);
+            const news = await axios.get(`${URL}/api/news_id/${id}`, {headers: header});
+            setNews(news.data);
+            setLoading(false);
         } catch (e) {}
     }, []);
 
-    useEffect(() => {
-        fetchNews();
-    }, []);
+    useEffect(fetchNews, []);
+
+    const date = new Date(news.datePublished);
 
     return (
        loading ? <BarWave className="loaderBar"/> : <div className="main-container">
@@ -69,7 +69,9 @@ const ViewNews = () => {
                                                 }
                                             }/>
                                         </div>
-
+                                    <br/>
+                                    <p>Дата публикации: {("0" + date.getDate()).slice(-2) + "." + ("0" + (date.getMonth() + 1)).slice(-2) + "." +
+                                        date.getFullYear()}</p>
 
                                 </div>
                             </div>
