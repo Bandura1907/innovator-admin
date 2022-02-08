@@ -34,10 +34,6 @@ const NewsAdd = () => {
     const radioPhotoLink = useRef();
     const radioVideoLink = useRef();
 
-    const photoRef = useRef();
-    const videoRef = useRef();
-
-
     useEffect(() => {
         radioPhotoLink.current.checked = true;
         radioVideoLink.current.checked = true;
@@ -247,7 +243,6 @@ const NewsAdd = () => {
                         <div className="col-sm-6 col-md-5">
                             <input className="form-control"
                                    type="text"
-                                   ref={photoRef}
                                    disabled={photoText}
                                    onChange={e => setPictureUrlFile(e.target.value)}/>
                         </div>
@@ -283,7 +278,6 @@ const NewsAdd = () => {
                         <label className="col-sm-12 col-md-2 col-form-label">url видео</label>
                         <div className="col-sm-6 col-md-5">
                             <input className="form-control" type='text'
-                                   ref={videoRef}
                                    onChange={e => setVideoUrlFile(e.target.value)}
                                    disabled={videoText}/>
                         </div>

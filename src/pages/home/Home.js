@@ -1,4 +1,5 @@
 import Chart from 'react-apexcharts';
+import photo from '../../images/photo6.jpg';
 
 const Home = () => {
 
@@ -177,7 +178,7 @@ const Home = () => {
                             <td className="table-plus">
                                 <div className="name-avatar d-flex align-items-center">
                                     <div className="avatar mr-2 flex-shrink-0">
-                                        <img src="vendors/images/photo4.jpg" className="border-radius-100 shadow"
+                                        <img src={photo} className="border-radius-100 shadow"
                                              width="40" height="40" alt=""/>
                                     </div>
                                     <div className="txt">
@@ -193,8 +194,8 @@ const Home = () => {
                                       data-color="#265ed7">Typhoid</span></td>
                             <td>
                                 <div className="table-actions">
-                                    <a href="#" data-color="#265ed7"><i className="icon-copy dw dw-edit2"></i></a>
-                                    <a href="#" data-color="#e95959"><i className="icon-copy dw dw-delete-3"></i></a>
+                                    <a href="#" style={{color: "#265ed7"}}><i className="icon-copy dw dw-edit2"></i></a>
+                                    <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -202,7 +203,7 @@ const Home = () => {
                             <td className="table-plus">
                                 <div className="name-avatar d-flex align-items-center">
                                     <div className="avatar mr-2 flex-shrink-0">
-                                        <img src="vendors/images/photo5.jpg" className="border-radius-100 shadow"
+                                        <img src={photo} className="border-radius-100 shadow"
                                              width="40" height="40" alt=""/>
                                     </div>
                                     <div className="txt">
@@ -218,8 +219,8 @@ const Home = () => {
                                       data-color="#265ed7">Dengue</span></td>
                             <td>
                                 <div className="table-actions">
-                                    <a href="#" data-color="#265ed7"><i className="icon-copy dw dw-edit2"></i></a>
-                                    <a href="#" data-color="#e95959"><i className="icon-copy dw dw-delete-3"></i></a>
+                                    <a href="#" style={{color: "#265ed7"}} ><i className="icon-copy dw dw-edit2"></i></a>
+                                    <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -227,7 +228,7 @@ const Home = () => {
                             <td className="table-plus">
                                 <div className="name-avatar d-flex align-items-center">
                                     <div className="avatar mr-2 flex-shrink-0">
-                                        <img src="vendors/images/photo6.jpg" className="border-radius-100 shadow"
+                                        <img src={photo} className="border-radius-100 shadow"
                                              width="40" height="40" alt=""/>
                                     </div>
                                     <div className="txt">
@@ -243,8 +244,8 @@ const Home = () => {
                                       data-color="#265ed7">Infection</span></td>
                             <td>
                                 <div className="table-actions">
-                                    <a href="#" data-color="#265ed7"><i className="icon-copy dw dw-edit2"></i></a>
-                                    <a href="#" data-color="#e95959"><i className="icon-copy dw dw-delete-3"></i></a>
+                                    <a href="#" style={{color: "#265ed7"}} ><i className="icon-copy dw dw-edit2"></i></a>
+                                    <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -252,7 +253,7 @@ const Home = () => {
                             <td className="table-plus">
                                 <div className="name-avatar d-flex align-items-center">
                                     <div className="avatar mr-2 flex-shrink-0">
-                                        <img src="vendors/images/photo9.jpg" className="border-radius-100 shadow"
+                                        <img src={photo} className="border-radius-100 shadow"
                                              width="40" height="40" alt=""/>
                                     </div>
                                     <div className="txt">
@@ -268,8 +269,8 @@ const Home = () => {
                                       data-color="#265ed7">Covid 19</span></td>
                             <td>
                                 <div className="table-actions">
-                                    <a href="#" data-color="#265ed7"><i className="icon-copy dw dw-edit2"/></a>
-                                    <a href="#" data-color="#e95959"><i className="icon-copy dw dw-delete-3"/></a>
+                                    <a href="#" style={{color: "#265ed7"}} ><i className="icon-copy dw dw-edit2"/></a>
+                                    <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"/></a>
                                 </div>
                             </td>
                         </tr>
@@ -277,7 +278,7 @@ const Home = () => {
                             <td className="table-plus">
                                 <div className="name-avatar d-flex align-items-center">
                                     <div className="avatar mr-2 flex-shrink-0">
-                                        <img src="vendors/images/photo1.jpg" className="border-radius-100 shadow"
+                                        <img src={photo} className="border-radius-100 shadow"
                                              width="40" height="40" alt=""/>
                                     </div>
                                     <div className="txt">
@@ -293,8 +294,8 @@ const Home = () => {
                                       data-color="#265ed7">Asthma</span></td>
                             <td>
                                 <div className="table-actions">
-                                    <a href="#" data-color="#265ed7"><i className="icon-copy dw dw-edit2"/></a>
-                                    <a href="#" data-color="#e95959"><i className="icon-copy dw dw-delete-3"/></a>
+                                    <a href="#" style={{color: "#265ed7"}} data-color="#265ed7"><i className="icon-copy dw dw-edit2"/></a>
+                                    <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"/></a>
                                 </div>
                             </td>
                         </tr>
@@ -302,7 +303,7 @@ const Home = () => {
                             <td className="table-plus">
                                 <div className="name-avatar d-flex align-items-center">
                                     <div className="avatar mr-2 flex-shrink-0">
-                                        <img src="vendors/images/photo2.jpg" className="border-radius-100 shadow"
+                                        <img src={photo} className="border-radius-100 shadow"
                                              width="40" height="40" alt=""/>
                                     </div>
                                     <div className="txt">
@@ -318,8 +319,8 @@ const Home = () => {
                                       data-color="#265ed7">Diabetes</span></td>
                             <td>
                                 <div className="table-actions">
-                                    <a href="#" data-color="#265ed7"><i className="icon-copy dw dw-edit2"/></a>
-                                    <a href="#" data-color="#e95959"><i className="icon-copy dw dw-delete-3"/></a>
+                                    <a href="#" style={{color: "#265ed7"}} ><i className="icon-copy dw dw-edit2"/></a>
+                                    <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"/></a>
                                 </div>
                             </td>
                         </tr>
@@ -327,7 +328,7 @@ const Home = () => {
                             <td className="table-plus">
                                 <div className="name-avatar d-flex align-items-center">
                                     <div className="avatar mr-2 flex-shrink-0">
-                                        <img src="vendors/images/photo8.jpg" className="border-radius-100 shadow"
+                                        <img src={photo} className="border-radius-100 shadow"
                                              width="40" height="40" alt=""/>
                                     </div>
                                     <div className="txt">
@@ -343,8 +344,8 @@ const Home = () => {
                                       data-color="#265ed7">Diabetes</span></td>
                             <td>
                                 <div className="table-actions">
-                                    <a href="#" data-color="#265ed7"><i className="icon-copy dw dw-edit2"/></a>
-                                    <a href="#" data-color="#e95959"><i className="icon-copy dw dw-delete-3"/></a>
+                                    <a href="#" style={{color: "#265ed7"}}><i className="icon-copy dw dw-edit2"/></a>
+                                    <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"/></a>
                                 </div>
                             </td>
                         </tr>
@@ -352,7 +353,7 @@ const Home = () => {
                             <td className="table-plus">
                                 <div className="name-avatar d-flex align-items-center">
                                     <div className="avatar mr-2 flex-shrink-0">
-                                        <img src="vendors/images/photo1.jpg" className="border-radius-100 shadow"
+                                        <img src={photo} className="border-radius-100 shadow"
                                              width="40" height="40" alt=""/>
                                     </div>
                                     <div className="txt">
@@ -368,8 +369,8 @@ const Home = () => {
                                       data-color="#265ed7">Dengue</span></td>
                             <td>
                                 <div className="table-actions">
-                                    <a href="#" data-color="#265ed7"><i className="icon-copy dw dw-edit2"/></a>
-                                    <a href="#" data-color="#e95959"><i className="icon-copy dw dw-delete-3"/></a>
+                                    <a href="#" style={{color: "#265ed7"}}><i className="icon-copy dw dw-edit2"/></a>
+                                    <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"/></a>
                                 </div>
                             </td>
                         </tr>

@@ -1,7 +1,6 @@
 import './viewSupport.css';
 import {Redirect, useParams} from "react-router-dom";
 import {useCallback, useContext, useEffect, useRef, useState} from "react";
-import {useHttp} from "../../../hooks/http.hook";
 import {AuthContext} from "../../../context/auth-context";
 import {BarWave} from "react-cssfx-loading";
 import {URL} from "../../../services/url";
@@ -25,7 +24,6 @@ const ViewSupport = () => {
     const id = useParams().id;
 
     const [redirect, setRedirect] = useState(false);
-    const {loading, request} = useHttp();
     const {token} = useContext(AuthContext);
     const [report, setReport] = useState({});
     const [user, setUser] = useState({});
@@ -43,27 +41,25 @@ const ViewSupport = () => {
 
     const fetchNews = useCallback(async () => {
         try {
-            const fetchedReport = await request(`${URL}/api/report_by_id/${id}`, "GET", null, header);
+            const fetchedReport = await axios.get(`${URL}/api/report_by_id/${id}`, {headers: header});
 
-            setReport(fetchedReport);
-            setUser(fetchedReport.user);
+            setReport(fetchedReport.data);
+            setUser(fetchedReport.data.user);
             setMyLoader(false);
         } catch (e) {
         }
     }, []);
 
-    useEffect(() => {
-        fetchNews();
-    }, [id]);
+    useEffect(fetchNews, [id]);
 
     const solveProblem = async (e) => {
         e.preventDefault();
-        await request(`${URL}/api/solve_the_problem/${id}`, "PUT", null, header);
+        await axios.put(`${URL}/api/solve_the_problem/${id}`, null, {headers: header});
 
         setRedirect(true);
     }
 
-    const sendMail = e => {
+    const sendMail = async e => {
         e.preventDefault();
         setSendMailLoader(true);
 
@@ -82,7 +78,7 @@ const ViewSupport = () => {
             setSubjectEmpty(false);
             messageRef.current.className = "form-control";
             subjectRef.current.className = "form-control";
-            axios.post(`${URL}/api/report/sendMail`, {
+            await axios.post(`${URL}/api/report/sendMail`, {
                 to: report.customEmail,
                 subject: subjectRef.current.value,
                 text: messageRef.current.value

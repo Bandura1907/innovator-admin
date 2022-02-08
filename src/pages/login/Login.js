@@ -4,14 +4,12 @@ import innovator from '../../images/Innovator.svg';
 import {Link} from "react-router-dom";
 import {useContext, useState} from "react";
 import {AuthContext} from "../../context/auth-context";
-import {useHttp} from "../../hooks/http.hook";
 import {URL} from "../../services/url";
+import axios from "axios";
 
 const Login = () => {
     const auth = useContext(AuthContext);
     const [badCredentials, setBadCredentials] = useState(false);
-    const [login, setLogin] = useState(true);
-    const {loading, request, error, clearError} = useHttp();
     const [form, setForm] = useState({
         username: "",
         password: ""
@@ -23,13 +21,13 @@ const Login = () => {
 
     const loginHandler = async () => {
         try {
-            const data = await request(`${URL}/api/auth/signin`, "POST", {
+            const fetch = await axios.post(`${URL}/api/auth/signin`, {
                 username: form.username,
                 password: form.password
             });
-            auth.login(data.token, data.id, data.roles);
+            auth.login(fetch.data.token, fetch.data.id, fetch.data.roles);
         } catch (err) {
-            if (err.message === 'Bad credentials'){
+            if (err.response.data.message === 'Bad credentials'){
                 setBadCredentials(true);
             }
         }
