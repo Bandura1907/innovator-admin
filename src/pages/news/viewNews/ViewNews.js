@@ -46,16 +46,6 @@ const ViewNews = () => {
                                     <h5 className="mb-10">Видео</h5>
 
                                         <div className="container">
-                                            {/*<video*/}
-                                            {/*    poster="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg?v1"*/}
-                                            {/*    controls crossOrigin>*/}
-                                            {/*    <source*/}
-                                            {/*        src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.mp4"*/}
-                                            {/*        type="video/mp4"/>*/}
-                                            {/*    <source*/}
-                                            {/*        src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.webm"*/}
-                                            {/*        type="video/webm"/>*/}
-                                            {/*</video>*/}
                                             <Plyr source={
                                                 {
                                                     type: "video",
