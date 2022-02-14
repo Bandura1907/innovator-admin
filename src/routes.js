@@ -13,6 +13,9 @@ import EditUser from "./pages/users/editUser/editUser";
 import AddUser from "./pages/users/addUser/addUser";
 import {CSSTransition} from "react-transition-group";
 import './routers.css';
+import Useful from "./pages/usefull/Useful";
+import {AddEditUseful} from "./pages/usefull/AddEditUseful/AddEditUseful";
+import {ViewUseful} from "./pages/usefull/ViewUseful";
 
 
 export const useRoutes = (userType) => {
@@ -23,6 +26,10 @@ export const useRoutes = (userType) => {
         {path: '/add-news', name: 'NewsAdd', Component: NewsAdd},
         {path: '/edit-news/:id', name: 'EditNews', Component: EditNews},
         {path: '/viewNews/:id', name: 'ViewNews', Component: ViewNews},
+        {path: '/useful', name: 'Useful', Component: Useful},
+        {path: '/add-edit-useful', name: 'AddEditUseful', Component: AddEditUseful},
+        {path: '/add-edit-useful/:id', name: 'AddEditUseful', Component: AddEditUseful},
+        {path: '/view-useful/:id', name: 'ViewUseful', Component: ViewUseful},
         {path: '/support', name: 'Support', Component: Support},
         {path: '/view-support/:id', name: 'ViewSupport', Component: ViewSupport},
         {path: '/users', name: 'Users', Component: Users},

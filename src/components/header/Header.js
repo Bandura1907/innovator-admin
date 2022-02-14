@@ -45,6 +45,9 @@ const Header = (props) => {
                                   active === `/edit-news/${location.pathname.slice(11)}` ? 'active' : null)}>Новости</Link>
                             {/*<a href="#"*/}
                             {/*   className={"nav-item nav-link " + (active === '/s' ? 'active' : null)}>Полезное</a>*/}
+                            <Link to="/useful"
+                                  className={"nav-item nav-link " + (active === '/useful' || active === '/add-useful' ? 'active' : null)}
+                            >Полезное</Link>
                             <Link to="/support"
                                   className={"nav-item nav-link " + (active === '/support' || active === `/view-support/${location.pathname.slice(14)}` ? 'active' : null)}>Поддержка</Link>
                             <Link to='/users'
