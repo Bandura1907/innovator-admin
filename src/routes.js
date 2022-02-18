@@ -16,6 +16,8 @@ import './routers.css';
 import Useful from "./pages/usefull/Useful";
 import {AddEditUseful} from "./pages/usefull/AddEditUseful/AddEditUseful";
 import {ViewUseful} from "./pages/usefull/ViewUseful";
+import UsersInnovator from "./pages/users-innovator/UsersInnovator";
+import UserInnovatorAddEdit from "./pages/users-innovator/UserInnovatorAddEdit";
 
 
 export const useRoutes = (userType) => {
@@ -34,7 +36,10 @@ export const useRoutes = (userType) => {
         {path: '/view-support/:id', name: 'ViewSupport', Component: ViewSupport},
         {path: '/users', name: 'Users', Component: Users},
         {path: '/edit-user/:id', name: 'EditUser', Component: EditUser},
-        {path: '/add-user', name: 'AddUser', Component: AddUser}
+        {path: '/add-user', name: 'AddUser', Component: AddUser},
+        {path: '/users-innovator', name: 'UsersInnovator', Component: UsersInnovator},
+        {path: '/users-innovator-add-edit', name: 'UsersInnovatorAddEdit', Component: UserInnovatorAddEdit},
+        {path: '/users-innovator-add-edit/:id', name: 'UsersInnovatorAddEdit', Component: UserInnovatorAddEdit}
     ];
     const routersManager = [
         {path: '/', name: 'Home', Component: Home},
@@ -51,15 +56,6 @@ export const useRoutes = (userType) => {
                 <Switch>
                     <Layout role="admin">
                         {/*<Route exact path="/" component={Home}/>*/}
-                        {/*<Route path="/news" component={News}/>*/}
-                        {/*<Route path='/add-news' component={NewsAdd}/>*/}
-                        {/*<Route path="/edit-news/:id" component={EditNews}/>*/}
-                        {/*<Route path="/viewNews/:id" component={ViewNews}/>*/}
-                        {/*<Route path="/support" component={Support}/>*/}
-                        {/*<Route path="/view-support/:id" component={ViewSupport}/>*/}
-                        {/*<Route path="/users" component={Users}/>*/}
-                        {/*<Route path="/edit-user/:id" component={EditUser}/>*/}
-                        {/*<Route path="/add-user" component={AddUser}/>*/}
                         {routersAdmin.map(({path, Component}) => (
                             <Route key={path} exact path={path}>
                                 {({match}) => (

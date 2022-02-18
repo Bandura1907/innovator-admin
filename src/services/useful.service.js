@@ -39,6 +39,12 @@ class UsefulService {
             category: useful.category
         }, {headers: {Authorization: 'Bearer ' + token}})
     }
+
+    async deleteUseful(token, id) {
+        return await axios.delete(`${URL}/api/useful/${id}`, {
+            headers: {Authorization: 'Bearer ' + token}
+        })
+    }
 }
 
 export default new UsefulService()

@@ -67,14 +67,14 @@ const NewsAdd = () => {
             const formDataPicture = new FormData();
             const formDataVideo = new FormData();
             formDataPicture.append("picture", pictureUrlFile[0].file);
-            formDataVideo.append("video", videoUrlFIle[0].file);
+            formDataVideo.append("file", videoUrlFIle[0].file);
 
             await axios.post(`${URL}/api/save_picture`, formDataPicture, options);
-            await axios.post(`${URL}/api/save_video`, formDataVideo, options);
+            const idVideo = await axios.post(`${URL}/api/video/upload`, formDataVideo, options);
 
             await axios.post(`${URL}/api/news_add`, {
                 pictureUrl: `${URL}/api/news/photo/${pictureUrlFile[0].file.name}`,
-                videoUrl: `${URL}/api/video/${videoUrlFIle[0].file.name}`,
+                videoUrl: `${URL}/api/video/stream/${idVideo.data}`,
                 title,
                 subtitle,
                 text,
@@ -115,13 +115,14 @@ const NewsAdd = () => {
         //save picture url (string) and video file
         else if (typeof pictureUrlFile === "string" && !(typeof videoUrlFIle === "string")) {
             const formData = new FormData();
-            formData.append("video", videoUrlFIle[0].file);
+            formData.append("file", videoUrlFIle[0].file);
 
-            await axios.post(`${URL}/api/save_video`, formData, options);
+           const idVideo = await axios.post(`${URL}/api/video/upload`, formData, options);
+            console.log(idVideo.data)
 
             await axios.post(`${URL}/api/news_add`, {
                 pictureUrl: pictureUrlFile,
-                videoUrl: `${URL}/api/video/${videoUrlFIle[0].file.name}`,
+                videoUrl: `${URL}/api/video/stream/${idVideo.data}`,
                 title,
                 subtitle,
                 text,
