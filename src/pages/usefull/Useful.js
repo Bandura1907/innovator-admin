@@ -9,10 +9,10 @@ const Useful = () => {
     const {token} = useContext(AuthContext);
     const [useful, setUseful] = useState([])
 
-    const fetchUseful = useCallback(async () => {
+    const fetchUseful = async () => {
         const fetched = await UsefulService.getAllUseful(token)
         setUseful(fetched.data)
-    }, [])
+    }
 
     useEffect(fetchUseful, [])
 

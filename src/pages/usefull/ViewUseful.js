@@ -1,4 +1,4 @@
-import {Link, useParams} from "react-router-dom";
+import {Link, Redirect, useParams} from "react-router-dom";
 import {useCallback, useContext, useEffect, useState} from "react";
 import UsefulService from "../../services/useful.service";
 import {AuthContext} from "../../context/auth-context";
@@ -7,6 +7,7 @@ export const ViewUseful = () => {
     const id = useParams().id
     const [useful, setUseful] = useState({})
     const {token} = useContext(AuthContext);
+    const [redirect, setRedirect] = useState(false)
 
     const fetchUseful  = useCallback(async () => {
         const fetch = await UsefulService.getUsefulById(token, id)
@@ -15,7 +16,17 @@ export const ViewUseful = () => {
 
     useEffect(fetchUseful, [])
 
+    const deleteHandler = async e => {
+        if (window.confirm("Вы уверены что хотите удалить?")) {
+            await UsefulService.deleteUseful(token, id)
+            setRedirect(true)
+        }
+    }
+
     const date = new Date(useful.datePublished)
+
+    if (redirect)
+        return <Redirect to="/useful"/>
 
     return (
         <div className="main-container">
@@ -27,6 +38,9 @@ export const ViewUseful = () => {
                                     data-toggle="collapse">Редактировать
                             </button>
                         </Link>
+                        <button type="submit" className="btn btn-danger btn-sm scroll-click m-1" rel="content-y" onClick={deleteHandler}
+                                data-toggle="collapse">Удалить
+                        </button>
                     </div>
                     <div className="row">
                         <div className="col-md-12 col-sm-12">

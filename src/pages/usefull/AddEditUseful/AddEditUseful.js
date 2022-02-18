@@ -15,7 +15,7 @@ export const AddEditUseful = () => {
         category: ""
     })
 
-    const fetchUseful = useCallback(async () => {
+    const fetchUseful = async () => {
        if (id) {
            const fetch = await UsefulService.getUsefulById(token, id)
            setUseful({
@@ -25,7 +25,7 @@ export const AddEditUseful = () => {
                category: fetch.data.category
            })
        }
-    }, [])
+    }
 
     useEffect(fetchUseful, [])
 

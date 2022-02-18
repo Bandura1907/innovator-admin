@@ -76,7 +76,7 @@ const Header = (props) => {
                             className="caret"/></a>
                         <div className="dropdown-menu">
                             {/*<a href="#" className="dropdown-item"><i className="fa fa-user-o"/> Profile</a>*/}
-                            {/*<a href="#" className="dropdown-item"><i className="fa fa-calendar-o"/> Calendar</a>*/}
+                            <Link to="/users-innovator" className="dropdown-item"><i className="fa fa-user"/> Посмотреть <br/>пользователей</Link>
                             <a href="#" className="dropdown-item" onClick={logout}><i
                                 className="fa fa-close"/> Выйти</a>
 

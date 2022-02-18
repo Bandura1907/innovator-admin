@@ -51,7 +51,6 @@ const ViewNews = () => {
                                                     type: "video",
                                                     sources: [
                                                         {
-                                                            // src: "https://nl100.cdnsqu.com/s/FXFSyR4T6p48UPCI5.3h7eGouUFBQUFBQUFBQUFBQmdvV2dCUUJC/hd_90/Adrienne.2021.MVO.Amedia.WEBDLRip_480.mp4?vs4-origin",
                                                             src: news.videoUrl,
                                                             provider: "html5"
                                                         }
