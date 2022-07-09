@@ -58,27 +58,41 @@ const News = () => {
                         onChange={handlePageChange}
             />
             {loading ? <BarWave className="loaderBar"/> : <div className="row">
-                <div className="col-lg-3 col-md-3 mt-4 pt-2">
-                    <div className="blog-post rounded border">
-                        <div className="blog-img d-block overflow-hidden position-relative">
-                            <img src={plus}
-                                 className="img-fluid rounded-top" alt=""/>
-                            <div className="overlay rounded-top bg-dark"/>
-                            <div className="post-meta">
-                                <Link to="/add-news" className="text-light read-more">Добавить новость <i
-                                    className="mdi mdi-chevron-right"/></Link>
+                {/*<div className="col-lg-3 col-md-3 mt-4 pt-2">*/}
+                    {/*<div className="blog-post rounded border">*/}
+                    {/*    <div className="blog-img d-block overflow-hidden position-relative">*/}
+                    {/*        <img src={plus}*/}
+                    {/*             className="img-fluid rounded-top" alt=""/>*/}
+                    {/*        <div className="overlay rounded-top bg-dark"/>*/}
+                    {/*        <div className="post-meta">*/}
+                    {/*            <Link to="/add-news" className="text-light read-more">Добавить новость <i*/}
+                    {/*                className="mdi mdi-chevron-right"/></Link>*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*    <div className="content p-3">*/}
+                    {/*        */}
+                    {/*        <h4 className="mt-2"><Link to="/add-news" className="text-dark title">Добавте свою*/}
+                    {/*            новость.</Link></h4>*/}
+                    {/*        /!*<p className="text-muted mt-2">There is now an abundance of readable dummy texts.*!/*/}
+                    {/*        /!*    These are usually used when a text is required purely to fill a space.</p>*!/*/}
+
+                    {/*    </div>*/}
+                    {/*</div>*/}
+                {/*    <div className="col-sm-6 col-lg-3">*/}
+                {/*        */}
+                {/*    </div>*/}
+                {/*</div>*/}
+
+                <section className="why-us">
+                    <div className="pd-20">
+                        <div className="row">
+                            <div className="box-add">
+                                <h4 className="text-center"><Link to="/add-news" style={{color: '#fff'}}>+ Новость</Link></h4>
                             </div>
                         </div>
-                        <div className="content p-3">
-
-                            <h4 className="mt-2"><Link to="/add-news" className="text-dark title">Добавте свою
-                                новость.</Link></h4>
-                            {/*<p className="text-muted mt-2">There is now an abundance of readable dummy texts.*/}
-                            {/*    These are usually used when a text is required purely to fill a space.</p>*/}
-
-                        </div>
                     </div>
-                </div>
+
+                </section>
 
                 {
                     Array.from(news).map(value => {

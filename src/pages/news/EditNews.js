@@ -1,8 +1,8 @@
-import {Link, Redirect} from "react-router-dom";
-import {useContext, useEffect, useRef, useState} from "react";
-import {AuthContext} from "../../../context/auth-context";
-import {URL} from "../../../services/url";
-import axios from "axios";
+import {Link, Redirect, useParams} from "react-router-dom";
+import {useCallback, useContext, useEffect, useRef, useState} from "react";
+import {BarWave} from "react-cssfx-loading";
+import {AuthContext} from "../../context/auth-context";
+import {URL} from "../../services/url";
 import {FilePond, registerPlugin} from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import {ProgressBar} from "react-bootstrap";
@@ -10,46 +10,63 @@ import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import axios from "axios";
 
 registerPlugin(FilePondPluginFileValidateType, FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
-const NewsAdd = () => {
+const EditNews = () => {
+    const id = useParams().id;
 
     const [redirect, setRedirect] = useState(false);
-
+    const [pictureUrlFile, setPictureUrlFile] = useState('');
+    const [videoUrlFile, setVideoUrlFile] = useState('');
     const [title, setTitle] = useState('');
     const [subtitle, setSubtitle] = useState('');
-    const [pictureUrlFile, setPictureUrlFile] = useState(null);
-    const [videoUrlFIle, setVideoUrlFile] = useState(null);
     const [text, setText] = useState('');
     const [sourceUrl, setSourceUrl] = useState('');
+    const [loading, setLoading] = useState(true);
     const {token} = useContext(AuthContext);
-    const [photoText, setPhotoText] = useState(false);
-    const [photoFile, setPhotoFile] = useState(true);
-    const [videoText, setVideoText] = useState(false);
-    const [videoFile, setVideoFile] = useState(true);
-
-    const [uploadPercentage, setUploadPercentage] = useState(0);
+    const header = {
+        Authorization: `Bearer ${token}`
+    };
 
     const radioPhotoLink = useRef();
     const radioVideoLink = useRef();
 
-    useEffect(() => {
-        radioPhotoLink.current.checked = true;
-        radioVideoLink.current.checked = true;
-        setPictureUrlFile("");
-        setVideoUrlFile("");
+    const [photoFile, setPhotoFile] = useState(true);
+    const [photoText, setPhotoText] = useState(false);
+    const [videoText, setVideoText] = useState(false);
+    const [videoFile, setVideoFile] = useState(true);
+    const [uploadPercentage, setUploadPercentage] = useState(0);
 
-    }, [])
+    const fetchNews = useCallback(async () => {
+        try {
+            const news = await axios.get(`${URL}/api/news_id/${id}`, {headers: header});
+            setPictureUrlFile(news.data.pictureUrl);
+            setVideoUrlFile(news.data.videoUrl);
+            setText(news.data.text);
+            setSourceUrl(news.data.sourceUrl);
+            setTitle(news.data.title);
+            setSubtitle(news.data.subtitle);
+            setLoading(false);
+        } catch (e) {}
+    }, []);
 
-    const saveNews = async (e) => {
-        e.preventDefault();
+    useEffect(fetchNews, []);
 
+    // useEffect(() => {
+    //     radioPhotoLink.current.checked = true;
+    //     radioVideoLink.current.checked = true;
+    // }, []);
+
+
+    const save = async (e) => {
+           e.preventDefault();
         const options = {
             onUploadProgress: (progressEvent) => {
                 const {loaded, total} = progressEvent;
                 let percent = Math.floor((loaded * 100) / total);
-                console.log(`${loaded}kb of ${total}kb | ${percent}%`);
+                // console.log(`${loaded}kb of ${total}kb | ${percent}%`);
 
                 if (percent < 100) {
                     setUploadPercentage(percent);
@@ -59,20 +76,18 @@ const NewsAdd = () => {
                 ContentType: "multipart/form-data",
                 Authorization: `Bearer ${token}`
             }
-        }
+        };
 
-
-        //save video and picture url text
-        if (!(typeof pictureUrlFile === "string") && !(typeof videoUrlFIle === "string")) {
+        if (!(typeof pictureUrlFile === "string") && !(typeof videoUrlFile === "string")) {
             const formDataPicture = new FormData();
             const formDataVideo = new FormData();
             formDataPicture.append("picture", pictureUrlFile[0].file);
-            formDataVideo.append("file", videoUrlFIle[0].file);
+            formDataVideo.append("file", videoUrlFile[0].file);
 
             await axios.post(`${URL}/api/save_picture`, formDataPicture, options);
             const idVideo = await axios.post(`${URL}/api/video/upload`, formDataVideo, options);
 
-            await axios.post(`${URL}/api/news_add`, {
+            await axios.put(`${URL}/api/news_edit/${id}`, {
                 pictureUrl: `${URL}/api/news/photo/${pictureUrlFile[0].file.name}`,
                 videoUrl: `${URL}/api/video/stream/${idVideo.data}`,
                 title,
@@ -80,47 +95,37 @@ const NewsAdd = () => {
                 text,
                 sourceUrl
             }, {
-                // cancelToken: source.token,
                 headers: {
                     ContentType: "application/json",
                     Authorization: `Bearer ${token}`
                 }
             });
-
-            console.log("upload files success")
-        }
-        //save video url (string) and picture file
-        else if (!(typeof pictureUrlFile === "string") && typeof videoUrlFIle === "string") {
+        }  else if (!(typeof pictureUrlFile === "string") && typeof videoUrlFile === "string") {
             const formData = new FormData();
             formData.append("picture", pictureUrlFile[0].file);
 
             await axios.post(`${URL}/api/save_picture`, formData, options);
 
-            await axios.post(`${URL}/api/news_add`, {
+            await axios.put(`${URL}/api/news_edit/${id}`, {
                 pictureUrl: `${URL}/api/news/photo/${pictureUrlFile[0].file.name}`,
                 title,
                 subtitle,
-                videoUrl: videoUrlFIle,
+                videoUrl: videoUrlFile,
                 text,
                 sourceUrl
             }, {
-                // cancelToken: source.token,
                 headers: {
                     ContentType: "application/json",
                     Authorization: `Bearer ${token}`
                 }
             });
-
-        }
-        //save picture url (string) and video file
-        else if (typeof pictureUrlFile === "string" && !(typeof videoUrlFIle === "string")) {
+        }  else if (typeof pictureUrlFile === "string" && !(typeof videoUrlFile === "string")) {
             const formData = new FormData();
-            formData.append("file", videoUrlFIle[0].file);
+            formData.append("file", videoUrlFile[0].file);
 
-           const idVideo = await axios.post(`${URL}/api/video/upload`, formData, options);
-            console.log(idVideo.data)
+            const idVideo = await axios.post(`${URL}/api/video/upload`, formData, options);
 
-            await axios.post(`${URL}/api/news_add`, {
+            await axios.put(`${URL}/api/news_edit/${id}`, {
                 pictureUrl: pictureUrlFile,
                 videoUrl: `${URL}/api/video/stream/${idVideo.data}`,
                 title,
@@ -133,12 +138,12 @@ const NewsAdd = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-        } else if (((typeof videoUrlFIle === "string") && (typeof pictureUrlFile === "string"))) {
-            await axios.post(`${URL}/api/news_add`, {
+        } else if (((typeof videoUrlFile === "string") && (typeof pictureUrlFile === "string"))) {
+            await axios.put(`${URL}/api/news_edit/${id}`, {
                 title,
                 subtitle,
                 pictureUrl: pictureUrlFile,
-                videoUrl: videoUrlFIle,
+                videoUrl: videoUrlFile,
                 text,
                 sourceUrl
             }, {
@@ -146,18 +151,16 @@ const NewsAdd = () => {
                     ContentType: "application/json",
                     Authorization: `Bearer ${token}`
                 }
-            })
+            });
         }
 
         setRedirect(true);
-
-
-    };
+    }
 
     const radioPhotoFileHandler = e => {
         if (e.target.checked) {
             setPhotoFile(false);
-            setPictureUrlFile("");
+            // setPictureUrlFile("");
             setPhotoText(true);
         }
     };
@@ -179,23 +182,22 @@ const NewsAdd = () => {
     const radioVideoFileHandler = e => {
         if (e.target.checked) {
             setVideoFile(false);
-            setVideoUrlFile("");
+            // setVideoUrlFile("");
             setVideoText(true);
         }
     };
-
 
     if (redirect)
         return <Redirect to='/news'/>
 
     return (
-        <div className="main-container">
+        loading ? <BarWave className="loaderBar"/> : <div className="main-container">
             <div className="pd-20 card-box mb-30">
-                <form onSubmit={saveNews}>
+                <form onSubmit={save}>
                     <div className="clearfix">
                         <div className="pull-left">
                             <h4 className="text-blue h4">Новости</h4>
-                            <p className="mb-30">Добавте новость</p>
+                            <p className="mb-30">Редактирование</p>
                         </div>
                         {uploadPercentage > 0 &&
                             <ProgressBar now={uploadPercentage} active label={`${uploadPercentage}%`}/>}
@@ -214,14 +216,14 @@ const NewsAdd = () => {
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">Заголовок</label>
                         <div className="col-sm-12 col-md-10">
-                            <input className="form-control" type="text" onChange={e => setTitle(e.target.value)} required={true}/>
+                            <input className="form-control" type="text" value={title} onChange={e => setTitle(e.target.value)} required={true}/>
                         </div>
                     </div>
 
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">Подзаголовок</label>
                         <div className="col-sm-12 col-md-10">
-                            <input className="form-control" type="text" onChange={e => setSubtitle(e.target.value)}/>
+                            <input className="form-control" type="text" value={subtitle} onChange={e => setSubtitle(e.target.value)}/>
                         </div>
                     </div>
 
@@ -239,17 +241,18 @@ const NewsAdd = () => {
                             <label className="custom-control-label" htmlFor="customRadio2">Загрузить картинку</label>
                         </div>
                     </div>
+
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">url картинки</label>
                         <div className="col-sm-6 col-md-5">
                             <input className="form-control"
-                                   type="text"
+                                   value={pictureUrlFile}
                                    disabled={photoText}
+                                   type="text"
                                    onChange={e => setPictureUrlFile(e.target.value)}/>
                         </div>
                         <div className="col-sm-6 col-md-5">
                             <FilePond
-                                // files={pictureUrlFile}
                                 allowReorder={true}
                                 onupdatefiles={setPictureUrlFile}
                                 disabled={photoFile}
@@ -258,6 +261,7 @@ const NewsAdd = () => {
                                 labelIdle='Загрузить картинку (.jpg .jpeg .png)'
                             />
                         </div>
+
                     </div>
 
                     <div className="form-group row">
@@ -275,16 +279,17 @@ const NewsAdd = () => {
                             <label className="custom-control-label" htmlFor="customRadioVideo2">Загрузить видео</label>
                         </div>
                     </div>
+
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">url видео</label>
                         <div className="col-sm-6 col-md-5">
-                            <input className="form-control" type='text'
+                            <input className="form-control" type='text' value={videoUrlFile}
                                    onChange={e => setVideoUrlFile(e.target.value)}
-                                   disabled={videoText}/>
+                                   disabled={videoText}
+                            />
                         </div>
                         <div className="col-sm-6 col-md-5">
                             <FilePond
-                                // files={videoUrlFIle}
                                 allowReorder={true}
                                 onupdatefiles={setVideoUrlFile}
                                 disabled={videoFile}
@@ -297,14 +302,14 @@ const NewsAdd = () => {
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">Текст</label>
                         <div className="col-sm-12 col-md-10">
-                            <textarea className="form-control" onChange={e => setText(e.target.value)} required={true}/>
+                            <textarea className="form-control" value={text} onChange={e => setText(e.target.value)} required={true}/>
                         </div>
                     </div>
 
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">source Url</label>
                         <div className="col-sm-12 col-md-10">
-                            <input className="form-control" type="text" onChange={e => setSourceUrl(e.target.value)}/>
+                            <input className="form-control" type="text" value={sourceUrl} onChange={e => setSourceUrl(e.target.value)}/>
                         </div>
                     </div>
                 </form>
@@ -313,4 +318,4 @@ const NewsAdd = () => {
     );
 };
 
-export default NewsAdd;
+export default EditNews;
