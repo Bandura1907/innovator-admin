@@ -1,5 +1,5 @@
 import './useful.css'
-import {useCallback, useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import UsefulService from "../../services/useful.service";
 import {AuthContext} from "../../context/auth-context";
 import {Link} from "react-router-dom";
@@ -9,47 +9,86 @@ const Useful = () => {
     const {token} = useContext(AuthContext);
     const [useful, setUseful] = useState([])
 
-    const fetchUseful = async () => {
+
+    useEffect(async () => {
         const fetched = await UsefulService.getAllUseful(token)
         setUseful(fetched.data)
-    }
+    }, [])
 
-    useEffect(fetchUseful, [])
+
 
     return (
         <section className="why-us">
 
-            <div className="row">
-                <div className="col-md-8 offset-md-2">
-                    <h2 className="mt-5 text-center">ПОЛЕЗНОЕ</h2>
-                    <p className="mb-5 text-center">Здесь полезная для Инноватора информация. Сверху видео которые можно
-                        свайпать влево (всего прогружено 3 видео). Внизу статьи которые можно свайпать вверх (всего
-                        прогружено 10 статей). Чтобы посмотреть больше статей или видео нужно переходить по ссылкам “Все
-                        видео” или “Все статьи”.
-                    </p>
-                    <br/>
-                </div>
-            </div>
+            <div className="tab">
+                <div className="pd-20">
+                    <ul className="nav nav-pills" role="tablist">
+                        <li className="nav-item">
+                            <a className="nav-link active text-blue" data-toggle="tab" href="#home5" role="tab"
+                               aria-selected="true">Статья</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link text-blue" data-toggle="tab" href="#profile5" role="tab"
+                               aria-selected="false">Видео</a>
+                        </li>
 
-            <div className="row">
-                <div className="col-sm-6 col-lg-3">
-                    <div className="box-add">
-                        <h4 className="text-center"><Link to="/add-edit-useful" style={{color: '#fff'}}>Добавить</Link></h4>
-                    </div>
+                    </ul>
                 </div>
+                <div className="tab-content">
+                    <div className="tab-pane fade show active" id="home5" role="tabpanel">
 
-                {useful.map(value => (
-                    <div className="col-sm-6 col-lg-3" key={value.id}>
-                        <div className="box">
-                            <span>{value.id}</span>
-                            <h4><Link to={'/view-useful/' + value.id}>{value.title}</Link></h4>
-                            <p>{value.description.slice(0, 30)}...</p>
-                            <img src={value.imageUrl} alt=""/>
+                        <div className="pd-20">
+                            <div className="row">
+                                <div className="col-sm-6 col-lg-3">
+                                    <div className="box-add">
+                                        <h4 className="text-center"><Link to="/add-edit-article" style={{color: '#fff'}}>+
+                                            Статья</Link>
+                                        </h4>
+                                    </div>
+                                </div>
+
+                                {useful.articles?.map(value => (
+                                    <div className="col-sm-6 col-lg-3" key={value.id}>
+                                        <div className="box">
+                                            <span>{value.id}</span>
+                                            <h4><Link to={'/view-useful/' + value.id}>{value.name}</Link></h4>
+                                            <p>{value.description.slice(0, 30)}...</p>
+                                            <img src={value.pictureUrl} alt=""/>
+                                        </div>
+                                    </div>
+                                ))}
+
+
+
+                            </div>
                         </div>
                     </div>
-                ))}
+                    <div className="tab-pane fade" id="profile5" role="tabpanel">
+                        <div className="pd-20">
+                            <div className="row">
+                                <div className="col-sm-6 col-lg-3">
+                                    <div className="box-add">
+                                        <h4 className="text-center"><Link to="/add-edit-video" style={{color: '#fff'}}>+
+                                            Видео</Link>
+                                        </h4>
+                                    </div>
+                                </div>
 
+                                {useful.videos?.map(value => (
+                                    <div className="col-sm-6 col-lg-3" key={value.id}>
+                                        <div className="box">
+                                            <span>{value.id}</span>
+                                            <h4><Link to={'/view-video/' + value.id}>{value.name}</Link></h4>
+                                            <img src={value.pictureUrl} alt=""/>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
 
         </section>
     )

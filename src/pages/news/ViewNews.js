@@ -3,8 +3,8 @@ import {useCallback, useContext, useEffect, useState} from "react";
 import Plyr from "plyr-react";
 import 'plyr-react/dist/plyr.css';
 import {BarWave} from "react-cssfx-loading";
-import {AuthContext} from "../../../context/auth-context";
-import {URL} from "../../../services/url";
+import {AuthContext} from "../../context/auth-context";
+import {URL} from "../../services/url";
 import axios from "axios";
 
 const ViewNews = () => {
