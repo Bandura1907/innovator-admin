@@ -22,8 +22,8 @@ const Header = (props) => {
 
     return (
         <nav className="navbar navbar-expand-xl navbar-light bg-light">
-            {/*<Link to="/" className="navbar-brand"><img src={logo} alt="" width={30}*/}
-            {/*                                           height={30}/><b> Innovator</b></Link>*/}
+            <Link to="/" className="navbar-brand"><img src={logo} alt="" width={30}
+                                                       height={30}/><b> Innovator</b></Link>
             <button type="button" className="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span className="navbar-toggler-icon"/>
             </button>

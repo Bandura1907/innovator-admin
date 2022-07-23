@@ -1,5 +1,5 @@
 import {Link, Redirect, useParams} from "react-router-dom";
-import { useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../context/auth-context";
 import UsefulService from "../../services/useful.service";
 import {FilePond} from "react-filepond";
@@ -63,7 +63,9 @@ export const AddEditArticle = () => {
                     <div className="clearfix">
                         <div className="pull-left">
                             <h4 className="text-blue h4">Статья</h4>
-                            <p className="mb-30">Добавить статью</p>
+                            {id ? <p className="mb-30">Редактировать статью</p> :
+                                <p className="mb-30">Добавить статью</p>}
+                            {/*<p className="mb-30">Добавить статью</p>*/}
                         </div>
                         <div className="pull-right">
                             <Link to="/useful">
