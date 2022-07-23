@@ -35,9 +35,9 @@ const NewsAdd = () => {
     const radioVideoLink = useRef();
 
     useEffect(() => {
-        radioPhotoLink.current.checked = true;
+        // radioPhotoLink.current.checked = true;
         radioVideoLink.current.checked = true;
-        setPictureUrlFile("");
+        // setPictureUrlFile("");
         setVideoUrlFile("");
 
     }, [])
@@ -61,15 +61,15 @@ const NewsAdd = () => {
             }
         }
 
-
-        //save video and picture url text
         if (!(typeof pictureUrlFile === "string") && !(typeof videoUrlFIle === "string")) {
             const formDataPicture = new FormData();
             const formDataVideo = new FormData();
             formDataPicture.append("picture", pictureUrlFile[0].file);
             formDataVideo.append("file", videoUrlFIle[0].file);
 
+
             await axios.post(`${URL}/api/save_picture`, formDataPicture, options);
+
             const idVideo = await axios.post(`${URL}/api/video/upload`, formDataVideo, options);
 
             await axios.post(`${URL}/api/news_add`, {
@@ -80,7 +80,6 @@ const NewsAdd = () => {
                 text,
                 sourceUrl
             }, {
-                // cancelToken: source.token,
                 headers: {
                     ContentType: "application/json",
                     Authorization: `Bearer ${token}`
@@ -113,61 +112,61 @@ const NewsAdd = () => {
 
         }
         //save picture url (string) and video file
-        else if (typeof pictureUrlFile === "string" && !(typeof videoUrlFIle === "string")) {
-            const formData = new FormData();
-            formData.append("file", videoUrlFIle[0].file);
-
-           const idVideo = await axios.post(`${URL}/api/video/upload`, formData, options);
-            console.log(idVideo.data)
-
-            await axios.post(`${URL}/api/news_add`, {
-                pictureUrl: pictureUrlFile,
-                videoUrl: `${URL}/api/video/stream/${idVideo.data}`,
-                title,
-                subtitle,
-                text,
-                sourceUrl
-            }, {
-                headers: {
-                    ContentType: "application/json",
-                    Authorization: `Bearer ${token}`
-                }
-            });
-        } else if (((typeof videoUrlFIle === "string") && (typeof pictureUrlFile === "string"))) {
-            await axios.post(`${URL}/api/news_add`, {
-                title,
-                subtitle,
-                pictureUrl: pictureUrlFile,
-                videoUrl: videoUrlFIle,
-                text,
-                sourceUrl
-            }, {
-                headers: {
-                    ContentType: "application/json",
-                    Authorization: `Bearer ${token}`
-                }
-            })
-        }
+        // else if (typeof pictureUrlFile === "string" && !(typeof videoUrlFIle === "string")) {
+        //     const formData = new FormData();
+        //     formData.append("file", videoUrlFIle[0].file);
+        //
+        //    const idVideo = await axios.post(`${URL}/api/video/upload`, formData, options);
+        //     console.log(idVideo.data)
+        //
+        //     await axios.post(`${URL}/api/news_add`, {
+        //         pictureUrl: pictureUrlFile,
+        //         videoUrl: `${URL}/api/video/stream/${idVideo.data}`,
+        //         title,
+        //         subtitle,
+        //         text,
+        //         sourceUrl
+        //     }, {
+        //         headers: {
+        //             ContentType: "application/json",
+        //             Authorization: `Bearer ${token}`
+        //         }
+        //     });
+        // } else if (((typeof videoUrlFIle === "string") && (typeof pictureUrlFile === "string"))) {
+        //     await axios.post(`${URL}/api/news_add`, {
+        //         title,
+        //         subtitle,
+        //         pictureUrl: pictureUrlFile,
+        //         videoUrl: videoUrlFIle,
+        //         text,
+        //         sourceUrl
+        //     }, {
+        //         headers: {
+        //             ContentType: "application/json",
+        //             Authorization: `Bearer ${token}`
+        //         }
+        //     })
+        // }
 
         setRedirect(true);
 
 
     };
 
-    const radioPhotoFileHandler = e => {
-        if (e.target.checked) {
-            setPhotoFile(false);
-            setPictureUrlFile("");
-            setPhotoText(true);
-        }
-    };
-
-    const radioPhotoTextHandler = e => {
-        if (e.target.checked) {
-            setPhotoFile(true);
-            setPhotoText(false);
-        }
-    };
+    // const radioPhotoFileHandler = e => {
+    //     if (e.target.checked) {
+    //         setPhotoFile(false);
+    //         setPictureUrlFile("");
+    //         setPhotoText(true);
+    //     }
+    // };
+    //
+    // const radioPhotoTextHandler = e => {
+    //     if (e.target.checked) {
+    //         setPhotoFile(true);
+    //         setPhotoText(false);
+    //     }
+    // };
 
     const radioVideoTextHandler = e => {
         if (e.target.checked) {
@@ -225,34 +224,35 @@ const NewsAdd = () => {
                         </div>
                     </div>
 
-                    <div className="form-group row">
-                        <div className="custom-control custom-radio mb-5 ml-2">
-                            <input type="radio" id="customRadio1" ref={radioPhotoLink}
-                                   name="customRadio" onClick={radioPhotoTextHandler}
-                                   className="custom-control-input"/>
-                            <label className="custom-control-label" htmlFor="customRadio1">URL картинки</label>
-                        </div>
-                        <div className="custom-control custom-radio mb-5 ml-4">
-                            <input type="radio" id="customRadio2"
-                                   name="customRadio" onClick={radioPhotoFileHandler}
-                                   className="custom-control-input"/>
-                            <label className="custom-control-label" htmlFor="customRadio2">Загрузить картинку</label>
-                        </div>
-                    </div>
+                    {/*<div className="form-group row">*/}
+                    {/*    <div className="custom-control custom-radio mb-5 ml-2">*/}
+                    {/*        <input type="radio" id="customRadio1" ref={radioPhotoLink}*/}
+                    {/*               name="customRadio" onClick={radioPhotoTextHandler}*/}
+                    {/*               className="custom-control-input"/>*/}
+                    {/*        <label className="custom-control-label" htmlFor="customRadio1">URL картинки</label>*/}
+                    {/*    </div>*/}
+                    {/*    <div className="custom-control custom-radio mb-5 ml-4">*/}
+                    {/*        <input type="radio" id="customRadio2"*/}
+                    {/*               name="customRadio" onClick={radioPhotoFileHandler}*/}
+                    {/*               className="custom-control-input"/>*/}
+                    {/*        <label className="custom-control-label" htmlFor="customRadio2">Загрузить картинку</label>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                     <div className="form-group row">
                         <label className="col-sm-12 col-md-2 col-form-label">url картинки</label>
-                        <div className="col-sm-6 col-md-5">
-                            <input className="form-control"
-                                   type="text"
-                                   disabled={photoText}
-                                   onChange={e => setPictureUrlFile(e.target.value)}/>
-                        </div>
-                        <div className="col-sm-6 col-md-5">
+                        {/*<div className="col-sm-6 col-md-5">*/}
+                        {/*    <input className="form-control"*/}
+                        {/*           type="text"*/}
+                        {/*           disabled={photoText}*/}
+                        {/*           onChange={e => setPictureUrlFile(e.target.value)}/>*/}
+                        {/*</div>*/}
+                        <div className="col-sm-12 col-md-10">
                             <FilePond
                                 // files={pictureUrlFile}
                                 allowReorder={true}
                                 onupdatefiles={setPictureUrlFile}
-                                disabled={photoFile}
+                                required={true}
+                                // disabled={photoFile}
                                 allowFileTypeValidation={true}
                                 acceptedFileTypes={['image/jpg', 'image/jpeg', 'image/png']}
                                 labelIdle='Загрузить картинку (.jpg .jpeg .png)'

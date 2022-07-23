@@ -53,7 +53,6 @@ export const AddEditVideo = () => {
         }
 
 
-
         setRedirect(true);
     }
 
@@ -67,7 +66,9 @@ export const AddEditVideo = () => {
                     <div className="clearfix">
                         <div className="pull-left">
                             <h4 className="text-blue h4">Видео</h4>
-                            <p className="mb-30">Добавить видео</p>
+                            {id ? <p className="mb-30">Редактировать видео</p> :
+                                <p className="mb-30">Добавить видео</p>}
+                            {/*<p className="mb-30">Добавить видео</p>*/}
                         </div>
                         <div className="pull-right">
                             <Link to="/useful">
