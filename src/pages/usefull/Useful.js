@@ -3,22 +3,25 @@ import {useContext, useEffect, useState} from "react";
 import UsefulService from "../../services/useful.service";
 import {AuthContext} from "../../context/auth-context";
 import {Link} from "react-router-dom";
+import {BarWave} from "react-cssfx-loading";
 
 const Useful = () => {
 
     const {token} = useContext(AuthContext);
-    const [useful, setUseful] = useState([])
+    const [useful, setUseful] = useState([]);
+    const [loading, setLoading] = useState(true);
 
 
     useEffect(async () => {
-        const fetched = await UsefulService.getAllUseful(token)
-        setUseful(fetched.data)
-    }, [])
+        const fetched = await UsefulService.getAllUseful(token);
+        setUseful(fetched.data);
+        setLoading(false);
+    }, []);
 
 
 
     return (
-        <section className="why-us">
+        loading ? <BarWave className="loaderBar"/> : <section className="why-us">
 
             <div className="tab">
                 <div className="pd-20">

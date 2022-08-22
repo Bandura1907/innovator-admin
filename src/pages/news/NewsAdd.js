@@ -24,8 +24,8 @@ const NewsAdd = () => {
     const [text, setText] = useState('');
     const [sourceUrl, setSourceUrl] = useState('');
     const {token} = useContext(AuthContext);
-    const [photoText, setPhotoText] = useState(false);
-    const [photoFile, setPhotoFile] = useState(true);
+    // const [photoText, setPhotoText] = useState(false);
+    // const [photoFile, setPhotoFile] = useState(true);
     const [videoText, setVideoText] = useState(false);
     const [videoFile, setVideoFile] = useState(true);
 
