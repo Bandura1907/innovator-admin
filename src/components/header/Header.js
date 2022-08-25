@@ -49,6 +49,10 @@ const Header = (props) => {
                             <Link to='/users'
                                   className={"nav-item nav-link " + (active === '/users' || active === `/add-user` ||
                                   active === `/edit-user/${location.pathname.slice(11)}` ? 'active' : null)}>Пользователи</Link>
+                            <Link to="/blocks"
+                                  className={"nav-item nav-link " + (active === '/blocks' ? 'active' : null)}>
+                                Блоки
+                            </Link>
                         </> : <>
                             <Link to="/"
                                   className={"nav-item nav-link " + (active === '/' ? 'active' : null)}>Аналитика</Link>
@@ -68,11 +72,13 @@ const Header = (props) => {
                     {/*    className="badge">10</span></a>*/}
                     <div className="nav-item dropdown">
                         <a href="#" data-toggle="dropdown" className="nav-link dropdown-toggle user-action"><img
-                            src={logo} className="avatar" alt="Avatar"/> {props.role === 'admin' ? "ADMIN" : "MANAGER"} <b
-                            className="caret"/></a>
+                            src={logo} className="avatar" alt="Avatar"/> {props.role === 'admin' ? "ADMIN" : "MANAGER"}
+                            <b
+                                className="caret"/></a>
                         <div className="dropdown-menu">
                             {/*<a href="#" className="dropdown-item"><i className="fa fa-user-o"/> Profile</a>*/}
-                            <Link to="/users-innovator" className="dropdown-item"><i className="fa fa-user"/> Посмотреть <br/>пользователей</Link>
+                            <Link to="/users-innovator" className="dropdown-item"><i
+                                className="fa fa-user"/> Посмотреть <br/>пользователей</Link>
                             <a href="#" className="dropdown-item" onClick={logout}><i
                                 className="fa fa-close"/> Выйти</a>
 
