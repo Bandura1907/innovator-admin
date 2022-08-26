@@ -22,6 +22,7 @@ import UserInnovatorAddEdit from "./pages/users-innovator/UserInnovatorAddEdit";
 import {AddEditVideo} from "./pages/usefull/AddEditVideo";
 import Blocks from "./pages/blocks/Blocks";
 import ViewBlock from "./pages/blocks/ViewBlock";
+import AddEditBlock from "./pages/blocks/AddEditBlock";
 
 
 export const useRoutes = (userType) => {
@@ -48,7 +49,9 @@ export const useRoutes = (userType) => {
         {path: '/users-innovator-add-edit', name: 'UsersInnovatorAddEdit', Component: UserInnovatorAddEdit},
         {path: '/users-innovator-add-edit/:id', name: 'UsersInnovatorAddEdit', Component: UserInnovatorAddEdit},
         {path: '/blocks', name: 'Blocks', Component: Blocks},
-        {path: '/view-block/:id', name: 'ViewBlock', Component: ViewBlock}
+        {path: '/view-block/:id', name: 'ViewBlock', Component: ViewBlock},
+        {path: '/add-block', name: "AddBlock", Component: AddEditBlock},
+        {path: '/edit-block/:id', name: "EditBlock", Component: AddEditBlock}
     ];
     const routersManager = [
         {path: '/', name: 'Home', Component: Home},

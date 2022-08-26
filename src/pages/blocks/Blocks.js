@@ -29,14 +29,16 @@ const Blocks = () => {
             return <i className="fa fa-digg"></i>;
     }
 
-    // const updateBlocks = async (i) => {
-    //     const res = await BlocksService.getBlocks(token, i);
-    //     setBlocks(res.data);
-    // };
-
     return <section>
 
         <div className="pd-20">
+            <div className="pull-right">
+                <Link to="/add-block">
+                    <button type="submit" className="btn btn-primary btn-sm scroll-click" rel="content-y"
+                            data-toggle="collapse">+ Добавить
+                    </button>
+                </Link>
+            </div>
             <ul className="nav nav-pills" role="tablist">
                 <li className="nav-item">
                     <a className="nav-link active text-blue" data-toggle="tab" href="#block3" role="tab"
@@ -56,7 +58,9 @@ const Blocks = () => {
                 </li>
 
             </ul>
+
         </div>
+
         {loading ? <BarWave className="loaderBar"/> : <div className="row">
             {
                 blocks?.map(value => (

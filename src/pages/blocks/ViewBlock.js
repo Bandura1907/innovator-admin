@@ -1,4 +1,4 @@
-import {Link, useParams} from "react-router-dom";
+import {Link, Redirect, useParams} from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../context/auth-context";
 import BlocksService from "../../services/blocks.service";
@@ -9,25 +9,36 @@ const ViewBlock = () => {
     const {token} = useContext(AuthContext);
     const [block, setBlock] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [redirect, setRedirect] = useState(false);
 
     useEffect(async () => {
         const res = await BlocksService.getBlockById(token, id);
         setBlock(res.data);
         setLoading(false);
-    }, [id]);
+    }, []);
+
+    const deleteBlock = async () => {
+        if (window.confirm("Вы уверены что хотите удалить блок?")) {
+            await BlocksService.deleteBlock(token, id);
+            setRedirect(true);
+        }
+    };
+
+    if (redirect)
+        return <Redirect to="/blocks"/>
 
 
     return loading ? <BarWave className="loaderBar"/> : <div className="main-container">
         <div className="blog-wrap">
             <div className="container pd-0">
                 <div className="pull-right">
-                    <Link to={'/innn' }>
+                    <Link to={'/edit-block/' + id}>
                         <button type="submit" className="btn btn-primary btn-sm scroll-click" rel="content-y"
                                 data-toggle="collapse">Редактировать
                         </button>
                     </Link>
                     <button type="submit" className="btn btn-danger btn-sm scroll-click m-1" rel="content-y"
-                            data-toggle="collapse">Удалить
+                            data-toggle="collapse" onClick={deleteBlock}>Удалить
                     </button>
                 </div>
                 <div className="row">
