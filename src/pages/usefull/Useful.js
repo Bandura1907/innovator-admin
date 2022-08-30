@@ -55,7 +55,7 @@ const Useful = () => {
                                         <Link to={'/view-useful/' + value.id}>
                                             <div className="box">
                                                 <span>{value.id}</span>
-                                                <h4>{value.name}</h4>
+                                                <h4 style={{color: "#fff"}}>{value.name}</h4>
                                                 <p>{value.description.slice(0, 30)}...</p>
                                                 <img src={value.pictureUrl} alt=""/>
                                             </div>
@@ -83,7 +83,7 @@ const Useful = () => {
                                         <Link to={'/view-video/' + value.id}>
                                             <div className="box">
                                                 <span>{value.id}</span>
-                                                <h4>{value.name}</h4>
+                                                <h4 style={{color: "#fff"}}>{value.name}</h4>
                                                 <img src={value.pictureUrl} alt=""/>
                                             </div>
                                         </Link>
