@@ -39,9 +39,6 @@ const AddEditBlock = () => {
             await BlocksService.addBlock(token, index, name, description);
             setRedirect(true);
         }
-        // console.log(index);
-        // console.log(name);
-        // console.log(description);
     }
 
     if (redirect){

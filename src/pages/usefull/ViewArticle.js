@@ -5,8 +5,8 @@ import {AuthContext} from "../../context/auth-context";
 import {BarWave} from "react-cssfx-loading";
 
 export const ViewArticle = () => {
-    const id = useParams().id
-    const [article, setArticle] = useState({})
+    const id = useParams().id;
+    const [article, setArticle] = useState({});
     const {token} = useContext(AuthContext);
     const [redirect, setRedirect] = useState(false)
     const [loading, setLoading] = useState(true);
