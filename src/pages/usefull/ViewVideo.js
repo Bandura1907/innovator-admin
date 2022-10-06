@@ -3,16 +3,19 @@ import {useContext, useEffect, useState} from "react";
 import {AuthContext} from "../../context/auth-context";
 import UsefulService from "../../services/useful.service";
 import Plyr from "plyr-react";
+import {BarWave} from "react-cssfx-loading";
 
 export const ViewVideo = () => {
     const id = useParams().id;
     const {token} = useContext(AuthContext);
     const [video, setVideo] = useState({});
     const [redirect, setRedirect] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(async () => {
         const fetch = await UsefulService.getVideo(token, id);
         setVideo(fetch.data);
+        setLoading(false);
     }, []);
 
     const deleteHandler = async () => {
@@ -25,7 +28,7 @@ export const ViewVideo = () => {
     if (redirect)
         return <Redirect to={'/useful'}/>
 
-    return <div className="main-container">
+    return loading ? <BarWave className="loaderBar"/> : <div className="main-container">
         <div className="blog-wrap">
             <div className="container pd-0">
                 <div className="pull-right">

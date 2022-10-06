@@ -1,5 +1,9 @@
 import Chart from 'react-apexcharts';
 import photo from '../../images/photo6.jpg';
+import {useContext, useEffect, useState} from "react";
+import {URL} from "../../services/url";
+import axios from "axios";
+import {AuthContext} from "../../context/auth-context";
 
 const Home = () => {
 
@@ -30,6 +34,40 @@ const Home = () => {
                 format: 'dd/MM/yy HH:mm'
             },
         },
+    };
+
+    const {token} = useContext(AuthContext);
+
+    const [activity, setActivity] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [fetching, setFetching] = useState(true);
+    // const [totalCount, setTotalCount] = useState(0);
+
+    useEffect(() => {
+        if (fetching) {
+            axios.get(`${URL}/api/activity?page=${currentPage}&pageSize=10`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(res => {
+                setActivity([...activity, ...res.data.activity]);
+                setCurrentPage(prevState => prevState + 1);
+                // setTotalCount(res.data.totalItems);
+            }).finally(() => setFetching(false));
+        }
+    }, [fetching]);
+
+    useEffect(() => {
+        document.addEventListener('scroll', scrollHandler);
+        return function () {
+            document.removeEventListener('scroll', scrollHandler);
+        };
+    }, []);
+
+    const scrollHandler = e => {
+        if (e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
+            setFetching(true);
+        }
     };
 
     return (
@@ -164,216 +202,51 @@ const Home = () => {
                     <table className="data-table table nowrap">
                         <thead>
                         <tr>
-                            <th className="table-plus">Name</th>
-                            <th>Gender</th>
-                            <th>Weight</th>
-                            <th>Assigned Doctor</th>
-                            <th>Admit Date</th>
-                            <th>Disease</th>
-                            <th className="datatable-nosort">Actions</th>
+                            <th className="table-plus">Сотрудник</th>
+                            <th>Дата</th>
+                            <th>Время</th>
+                            <th>Действие</th>
+                            {/*<th>Admit Date</th>*/}
+                            {/*<th>Disease</th>*/}
+                            {/*<th className="datatable-nosort">Actions</th>*/}
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td className="table-plus">
-                                <div className="name-avatar d-flex align-items-center">
-                                    <div className="avatar mr-2 flex-shrink-0">
-                                        <img src={photo} className="border-radius-100 shadow"
-                                             width="40" height="40" alt=""/>
-                                    </div>
-                                    <div className="txt">
-                                        <div className="weight-600">Jennifer O. Oster</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>Female</td>
-                            <td>45 kg</td>
-                            <td>Dr. Callie Reed</td>
-                            <td>19 Oct 2020</td>
-                            <td><span className="badge badge-pill" data-bgcolor="#e7ebf5"
-                                      data-color="#265ed7">Typhoid</span></td>
-                            <td>
-                                <div className="table-actions">
-                                    <a href="#" style={{color: "#265ed7"}}><i className="icon-copy dw dw-edit2"></i></a>
-                                    <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"></i></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="table-plus">
-                                <div className="name-avatar d-flex align-items-center">
-                                    <div className="avatar mr-2 flex-shrink-0">
-                                        <img src={photo} className="border-radius-100 shadow"
-                                             width="40" height="40" alt=""/>
-                                    </div>
-                                    <div className="txt">
-                                        <div className="weight-600">Doris L. Larson</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>Male</td>
-                            <td>76 kg</td>
-                            <td>Dr. Ren Delan</td>
-                            <td>22 Jul 2020</td>
-                            <td><span className="badge badge-pill" data-bgcolor="#e7ebf5"
-                                      data-color="#265ed7">Dengue</span></td>
-                            <td>
-                                <div className="table-actions">
-                                    <a href="#" style={{color: "#265ed7"}} ><i className="icon-copy dw dw-edit2"></i></a>
-                                    <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"></i></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="table-plus">
-                                <div className="name-avatar d-flex align-items-center">
-                                    <div className="avatar mr-2 flex-shrink-0">
-                                        <img src={photo} className="border-radius-100 shadow"
-                                             width="40" height="40" alt=""/>
-                                    </div>
-                                    <div className="txt">
-                                        <div className="weight-600">Joseph Powell</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>Male</td>
-                            <td>90 kg</td>
-                            <td>Dr. Allen Hannagan</td>
-                            <td>15 Nov 2020</td>
-                            <td><span className="badge badge-pill" data-bgcolor="#e7ebf5"
-                                      data-color="#265ed7">Infection</span></td>
-                            <td>
-                                <div className="table-actions">
-                                    <a href="#" style={{color: "#265ed7"}} ><i className="icon-copy dw dw-edit2"></i></a>
-                                    <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"></i></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="table-plus">
-                                <div className="name-avatar d-flex align-items-center">
-                                    <div className="avatar mr-2 flex-shrink-0">
-                                        <img src={photo} className="border-radius-100 shadow"
-                                             width="40" height="40" alt=""/>
-                                    </div>
-                                    <div className="txt">
-                                        <div className="weight-600">Jake Springer</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>Female</td>
-                            <td>45 kg</td>
-                            <td>Dr. Garrett Kincy</td>
-                            <td>08 Oct 2020</td>
-                            <td><span className="badge badge-pill" data-bgcolor="#e7ebf5"
-                                      data-color="#265ed7">Covid 19</span></td>
-                            <td>
-                                <div className="table-actions">
-                                    <a href="#" style={{color: "#265ed7"}} ><i className="icon-copy dw dw-edit2"/></a>
-                                    <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"/></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="table-plus">
-                                <div className="name-avatar d-flex align-items-center">
-                                    <div className="avatar mr-2 flex-shrink-0">
-                                        <img src={photo} className="border-radius-100 shadow"
-                                             width="40" height="40" alt=""/>
-                                    </div>
-                                    <div className="txt">
-                                        <div className="weight-600">Paul Buckland</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>Male</td>
-                            <td>76 kg</td>
-                            <td>Dr. Maxwell Soltes</td>
-                            <td>12 Dec 2020</td>
-                            <td><span className="badge badge-pill" data-bgcolor="#e7ebf5"
-                                      data-color="#265ed7">Asthma</span></td>
-                            <td>
-                                <div className="table-actions">
-                                    <a href="#" style={{color: "#265ed7"}} data-color="#265ed7"><i className="icon-copy dw dw-edit2"/></a>
-                                    <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"/></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="table-plus">
-                                <div className="name-avatar d-flex align-items-center">
-                                    <div className="avatar mr-2 flex-shrink-0">
-                                        <img src={photo} className="border-radius-100 shadow"
-                                             width="40" height="40" alt=""/>
-                                    </div>
-                                    <div className="txt">
-                                        <div className="weight-600">Neil Arnold</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>Male</td>
-                            <td>60 kg</td>
-                            <td>Dr. Sebastian Tandon</td>
-                            <td>30 Oct 2020</td>
-                            <td><span className="badge badge-pill" data-bgcolor="#e7ebf5"
-                                      data-color="#265ed7">Diabetes</span></td>
-                            <td>
-                                <div className="table-actions">
-                                    <a href="#" style={{color: "#265ed7"}} ><i className="icon-copy dw dw-edit2"/></a>
-                                    <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"/></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="table-plus">
-                                <div className="name-avatar d-flex align-items-center">
-                                    <div className="avatar mr-2 flex-shrink-0">
-                                        <img src={photo} className="border-radius-100 shadow"
-                                             width="40" height="40" alt=""/>
-                                    </div>
-                                    <div className="txt">
-                                        <div className="weight-600">Christian Dyer</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>Male</td>
-                            <td>80 kg</td>
-                            <td>Dr. Sebastian Tandon</td>
-                            <td>15 Jun 2020</td>
-                            <td><span className="badge badge-pill" data-bgcolor="#e7ebf5"
-                                      data-color="#265ed7">Diabetes</span></td>
-                            <td>
-                                <div className="table-actions">
-                                    <a href="#" style={{color: "#265ed7"}}><i className="icon-copy dw dw-edit2"/></a>
-                                    <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"/></a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="table-plus">
-                                <div className="name-avatar d-flex align-items-center">
-                                    <div className="avatar mr-2 flex-shrink-0">
-                                        <img src={photo} className="border-radius-100 shadow"
-                                             width="40" height="40" alt=""/>
-                                    </div>
-                                    <div className="txt">
-                                        <div className="weight-600">Doris L. Larson</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>Male</td>
-                            <td>76 kg</td>
-                            <td>Dr. Ren Delan</td>
-                            <td>22 Jul 2020</td>
-                            <td><span className="badge badge-pill" data-bgcolor="#e7ebf5"
-                                      data-color="#265ed7">Dengue</span></td>
-                            <td>
-                                <div className="table-actions">
-                                    <a href="#" style={{color: "#265ed7"}}><i className="icon-copy dw dw-edit2"/></a>
-                                    <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"/></a>
-                                </div>
-                            </td>
-                        </tr>
+
+                        {activity.map(item => <tr>
+                            <td>{item.username}</td>
+                            {/*<td>{item.createAt}</td>*/}
+                            <td>{("0" + new Date(item.createAt).getDate()).slice(-2) + "." + ("0" + (new Date(item.createAt).getMonth() + 1)).slice(-2) + "." +
+                                new Date(item.createAt).getFullYear()}</td>
+                            <td>{("0" + new Date(item.createAt).getHours()).slice(-2)}:{("0" + new Date(item.createAt).getMinutes()).slice(-2)}</td>
+                            <td>{item.description}</td>
+                        </tr>)}
+
+                        {/*<tr>*/}
+                        {/*    <td className="table-plus">*/}
+                        {/*        <div className="name-avatar d-flex align-items-center">*/}
+                        {/*            <div className="avatar mr-2 flex-shrink-0">*/}
+                        {/*                <img src={photo} className="border-radius-100 shadow"*/}
+                        {/*                     width="40" height="40" alt=""/>*/}
+                        {/*            </div>*/}
+                        {/*            <div className="txt">*/}
+                        {/*                <div className="weight-600">Jennifer O. Oster</div>*/}
+                        {/*            </div>*/}
+                        {/*        </div>*/}
+                        {/*    </td>*/}
+                        {/*    <td>Female</td>*/}
+                        {/*    <td>45 kg</td>*/}
+                        {/*    <td>Dr. Callie Reed</td>*/}
+                        {/*<td>19 Oct 2020</td>*/}
+                        {/*<td><span className="badge badge-pill" data-bgcolor="#e7ebf5"*/}
+                        {/*          data-color="#265ed7">Typhoid</span></td>*/}
+                        {/*<td>*/}
+                        {/*    <div className="table-actions">*/}
+                        {/*        <a href="#" style={{color: "#265ed7"}}><i className="icon-copy dw dw-edit2"></i></a>*/}
+                        {/*        <a href="#" style={{color: "#e95959"}}><i className="icon-copy dw dw-delete-3"></i></a>*/}
+                        {/*    </div>*/}
+                        {/*</td>*/}
+                        {/*</tr>*/}
                         </tbody>
                     </table>
                 </div>

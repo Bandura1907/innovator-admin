@@ -88,12 +88,12 @@ const Users = () => {
                     <div className="title pb-20">
                         <h2 className="h3 mb-0">Пользователи</h2>
                     </div>
-                    <div className="pull-right">
-                        <Link to="/add-user" type="submit" className="btn btn-primary btn-sm scroll-click"
-                              rel="content-y"
-                              data-toggle="collapse">Добавить
-                        </Link>
-                    </div>
+                    {/*<div className="pull-right">*/}
+                    {/*    <Link to="/add-user" type="submit" className="btn btn-primary btn-sm scroll-click"*/}
+                    {/*          rel="content-y"*/}
+                    {/*          data-toggle="collapse">Добавить*/}
+                    {/*    </Link>*/}
+                    {/*</div>*/}
                     <DataTable columns={columns}
                                data={users}
                         // selectableRows

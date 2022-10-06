@@ -2,17 +2,20 @@ import {Link, Redirect, useParams} from "react-router-dom";
 import {useCallback, useContext, useEffect, useState} from "react";
 import UsefulService from "../../services/useful.service";
 import {AuthContext} from "../../context/auth-context";
+import {BarWave} from "react-cssfx-loading";
 
 export const ViewArticle = () => {
-    const id = useParams().id
-    const [article, setArticle] = useState({})
+    const id = useParams().id;
+    const [article, setArticle] = useState({});
     const {token} = useContext(AuthContext);
     const [redirect, setRedirect] = useState(false)
+    const [loading, setLoading] = useState(true);
 
 
     useEffect(async () => {
-        const fetch = await UsefulService.getArticle(token, id)
-        setArticle(fetch.data)
+        const fetch = await UsefulService.getArticle(token, id);
+        setArticle(fetch.data);
+        setLoading(false);
     }, [])
 
     const deleteHandler = async e => {
@@ -27,7 +30,7 @@ export const ViewArticle = () => {
         return <Redirect to="/useful"/>
 
     return (
-        <div className="main-container">
+        loading ? <BarWave className="loaderBar"/> : <div className="main-container">
             <div className="blog-wrap">
                 <div className="container pd-0">
                     <div className="pull-right">

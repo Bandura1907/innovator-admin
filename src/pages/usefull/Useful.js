@@ -3,22 +3,24 @@ import {useContext, useEffect, useState} from "react";
 import UsefulService from "../../services/useful.service";
 import {AuthContext} from "../../context/auth-context";
 import {Link} from "react-router-dom";
+import {BarWave} from "react-cssfx-loading";
 
 const Useful = () => {
 
     const {token} = useContext(AuthContext);
-    const [useful, setUseful] = useState([])
+    const [useful, setUseful] = useState([]);
+    const [loading, setLoading] = useState(true);
 
 
     useEffect(async () => {
-        const fetched = await UsefulService.getAllUseful(token)
-        setUseful(fetched.data)
-    }, [])
-
+        const fetched = await UsefulService.getAllUseful(token);
+        setUseful(fetched.data);
+        setLoading(false);
+    }, []);
 
 
     return (
-        <section className="why-us">
+        loading ? <BarWave className="loaderBar"/> : <section className="why-us">
 
             <div className="tab">
                 <div className="pd-20">
@@ -41,7 +43,8 @@ const Useful = () => {
                             <div className="row">
                                 <div className="col-sm-6 col-lg-3">
                                     <div className="box-add">
-                                        <h4 className="text-center"><Link to="/add-edit-article" style={{color: '#fff'}}>+
+                                        <h4 className="text-center"><Link to="/add-edit-article"
+                                                                          style={{color: '#fff'}}>+
                                             Статья</Link>
                                         </h4>
                                     </div>
@@ -49,15 +52,16 @@ const Useful = () => {
 
                                 {useful.articles?.map(value => (
                                     <div className="col-sm-6 col-lg-3" key={value.id}>
-                                        <div className="box">
-                                            <span>{value.id}</span>
-                                            <h4><Link to={'/view-useful/' + value.id}>{value.name}</Link></h4>
-                                            <p>{value.description.slice(0, 30)}...</p>
-                                            <img src={value.pictureUrl} alt=""/>
-                                        </div>
+                                        <Link to={'/view-useful/' + value.id}>
+                                            <div className="box">
+                                                <span>{value.id}</span>
+                                                <h4 style={{color: "#fff"}}>{value.name}</h4>
+                                                <p>{value.description.slice(0, 30)}...</p>
+                                                <img src={value.pictureUrl} alt=""/>
+                                            </div>
+                                        </Link>
                                     </div>
                                 ))}
-
 
 
                             </div>
@@ -76,11 +80,13 @@ const Useful = () => {
 
                                 {useful.videos?.map(value => (
                                     <div className="col-sm-6 col-lg-3" key={value.id}>
-                                        <div className="box">
-                                            <span>{value.id}</span>
-                                            <h4><Link to={'/view-video/' + value.id}>{value.name}</Link></h4>
-                                            <img src={value.pictureUrl} alt=""/>
-                                        </div>
+                                        <Link to={'/view-video/' + value.id}>
+                                            <div className="box">
+                                                <span>{value.id}</span>
+                                                <h4 style={{color: "#fff"}}>{value.name}</h4>
+                                                <img src={value.pictureUrl} alt=""/>
+                                            </div>
+                                        </Link>
                                     </div>
                                 ))}
                             </div>

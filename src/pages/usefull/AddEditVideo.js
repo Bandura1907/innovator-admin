@@ -5,6 +5,7 @@ import {URL} from "../../services/url";
 import axios from "axios";
 import {AuthContext} from "../../context/auth-context";
 import UsefulService from "../../services/useful.service";
+import {ProgressBar} from "react-bootstrap";
 
 export const AddEditVideo = () => {
 
@@ -15,6 +16,8 @@ export const AddEditVideo = () => {
     const [name, setName] = useState("");
     const [redirect, setRedirect] = useState(false);
     const [videoUrl, setVideoUrl] = useState("");
+
+    const [uploadPercentage, setUploadPercentage] = useState(0);
 
     useEffect(async () => {
         if (id) {
@@ -27,6 +30,22 @@ export const AddEditVideo = () => {
     const saveHandler = async (e) => {
         e.preventDefault();
 
+        const options = {
+            onUploadProgress: (progressEvent) => {
+                const {loaded, total} = progressEvent;
+                let percent = Math.floor((loaded * 100) / total);
+                console.log(`${loaded}kb of ${total}kb | ${percent}%`);
+
+                if (percent < 100) {
+                    setUploadPercentage(percent);
+                }
+            },
+            headers: {
+                ContentType: "multipart/form-data",
+                Authorization: `Bearer ${token}`
+            }
+        };
+
         const formData = new FormData();
         if (picture != null) {
             formData.append("picture", picture[0].file)
@@ -35,9 +54,7 @@ export const AddEditVideo = () => {
         if (video != null) {
             const formDataVideo = new FormData();
             formDataVideo.append("file", video[0].file);
-            const idVideo = await axios.post(`${URL}/api/video/upload`, formDataVideo, {
-                headers: {Authorization: "Bearer " + token}
-            });
+            const idVideo = await axios.post(`${URL}/api/video/upload`, formDataVideo, options);
 
             formData.append("videoUrl", `${URL}/api/video/stream/${idVideo.data}`)
         } else formData.append("videoUrl", videoUrl);
@@ -47,9 +64,9 @@ export const AddEditVideo = () => {
         formData.append("pictureUrl", `${URL}/api/useful/get_picture/`);
 
         if (!id) {
-            await axios.post(`${URL}/api/useful/add_video`, formData, {headers: {Authorization: "Bearer " + token}});
+            await axios.post(`${URL}/api/useful/add_video`, formData, options);
         } else {
-            await axios.put(`${URL}/api/useful/edit_video/${id}`, formData, {headers: {Authorization: "Bearer " + token}});
+            await axios.put(`${URL}/api/useful/edit_video/${id}`, formData, options);
         }
 
 
@@ -69,6 +86,8 @@ export const AddEditVideo = () => {
                             {id ? <p className="mb-30">Редактировать видео</p> :
                                 <p className="mb-30">Добавить видео</p>}
                             {/*<p className="mb-30">Добавить видео</p>*/}
+                            {uploadPercentage > 0 &&
+                                <ProgressBar now={uploadPercentage} active label={`${uploadPercentage}%`}/>}
                         </div>
                         <div className="pull-right">
                             <Link to="/useful">
