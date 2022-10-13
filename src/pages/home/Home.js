@@ -1,5 +1,4 @@
 import Chart from 'react-apexcharts';
-import photo from '../../images/photo6.jpg';
 import {useContext, useEffect, useState} from "react";
 import {URL} from "../../services/url";
 import axios from "axios";
@@ -43,17 +42,29 @@ const Home = () => {
     const [fetching, setFetching] = useState(true);
     // const [totalCount, setTotalCount] = useState(0);
 
-    useEffect(() => {
+    useEffect( async () => {
         if (fetching) {
-            axios.get(`${URL}/api/activity?page=${currentPage}&pageSize=10`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }).then(res => {
+            try {
+                const res = await axios.get(`${URL}/api/activity?page=${currentPage}&pageSize=10`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
                 setActivity([...activity, ...res.data.activity]);
                 setCurrentPage(prevState => prevState + 1);
-                // setTotalCount(res.data.totalItems);
-            }).finally(() => setFetching(false));
+            } finally {
+                setFetching(false)
+            }
+
+            //  axios.get(`${URL}/api/activity?page=${currentPage}&pageSize=10`, {
+            //     headers: {
+            //         Authorization: `Bearer ${token}`
+            //     }
+            // }).then(res => {
+            //     setActivity([...activity, ...res.data.activity]);
+            //     setCurrentPage(prevState => prevState + 1);
+            //     // setTotalCount(res.data.totalItems);
+            // }).finally(() => setFetching(false));
         }
     }, [fetching]);
 
